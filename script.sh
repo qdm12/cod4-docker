@@ -7,9 +7,7 @@ if [ ! -f cod4x18_dedrun ]; then
 else
     echo "cod4x18_dedrun found, not downloading anything."
 fi
-ARGS=
-echo -e "\n\nLaunching Cod4X server...\n\n"
 if [[ -z "${ARGS}" ]]; then
-    ARGS="+set dedicated 2+set sv_punkbuster 0+set sv_maxclient 4+sv_authorizemode 0+map mp_shipment"
+    ARGS="+set net_port 28961 +map mp_killhousey"
 fi
 su server -c ./cod4x18_dedrun "$ARGS"
