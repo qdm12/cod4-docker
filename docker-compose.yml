@@ -1,0 +1,16 @@
+version: '3'
+services:
+    cod4:
+        image: qmcgaw/cod4-docker
+        container_name: cod4
+        volumes:
+            - /yourpath/main:/cod4/main
+            - /yourpath/zone:/cod4/zone
+            - /yourpath/mods:/cod4/mods
+            - /yourpath/usermaps:/cod4/usermaps
+        environment:
+            - ARGS=+map mp_shipment
+        ports:
+            - 28960:28960
+        network_mode: bridge
+        restart: always
