@@ -99,3 +99,4 @@ Set `ARGS` to `+set fs_game mods/SERVER+map_rotate`
 - Finish readme and add screenshots
 - Combine FTP server in docker-compose
 - Show online status
+- Instructions for client to update

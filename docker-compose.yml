@@ -1,7 +1,7 @@
 version: '3'
 services:
     cod4:
-        image: qmcgaw/cod4-docker
+        image: qmcgaw/cod4
         container_name: cod4
         volumes:
             - /yourpath/main:/cod4/main

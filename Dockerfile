@@ -6,5 +6,6 @@ RUN mkdir /cod4 && apt-get update && \
     unzip wget ca-certificates g++-multilib && \
     rm -rf /var/lib/apt/lists/*
 COPY entrypoint.sh /
+RUN chmod +x /entrypoint.sh
 WORKDIR /cod4
 ENTRYPOINT ["/entrypoint.sh"]
