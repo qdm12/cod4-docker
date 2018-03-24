@@ -14,3 +14,13 @@ services:
             - 28960:28960/udp
         network_mode: bridge
         restart: always
+    http:
+        image: httpd:alpine
+        container_name: cod4-http
+        volumes:
+            - /yourpath/mods:/usr/local/apache2/htdocs/mods
+            - /yourpath/usermaps:/usr/local/apache2/htdocs/usermaps
+        ports:
+            - 8000:80
+        network_mode: bridge
+        restart: always
