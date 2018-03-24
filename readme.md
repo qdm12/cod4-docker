@@ -13,10 +13,9 @@ Cod4x build:
 This image is **351 MB** and consumes **443 MB** of RAM (no player)
 
 It is based on:
-- [Cod4x](https://cod4x.me/) server program
+- [Cod4x](https://cod4x.me/) Linux Server
 - Debian
-- Unzip and wget to download the latest Cod4x
-- Cod4x dependencies: *g++-multilib*
+- g++-multilib
     
 ## Requirements
 
@@ -28,25 +27,24 @@ It is based on:
 - [Cod4x server features](https://github.com/callofduty4x/CoD4x_Server#the-most-prominent-features-are)
 - Works with custom mods and maps
 - Easily configurable
+- Docker compose runs a HTTP server for your clients to download your mods and usermaps
 
 ## Installation
 
-[![Docker container](https://github.com/qdm12/cod4-docker/raw/master/readme/docker.png)](https://www.docker.com/)
-
-1. Make sure you have [Docker](https://docs.docker.com/install/) installed
-
 ### Using Docker only
 
-We assume your call of duty 4 game is installed at `/mycod4path`
+#### Cod4x Server
+
+We assume your *call of duty 4 game* is installed at `/mycod4path`
 
 Two options:
 
 - Directly mount your call of duty 4 directories
-    1. Make sure to create the directories `mods` and `usermaps` in `mycod4path` if they don't exist
-    1. Enter
+    1. Create the directories `mods` and `usermaps` in `mycod4path` if they don't exist
+    1. Enter (make sure to change paths):
 
         ```bash   
-        docker run -d --name=cod4 --restart=always -p 28960:28960/udp \
+        docker run -d --name=cod4 --restart=always -p 28960/udp:28960/udp \
             -v /mycod4path/main:/cod4/main -v /mycod4path/zone:/cod4/zone \
             -v /mycod4path/mods:/cod4/mods -v /mycod4path/usermaps:/cod4/usermaps \
             -e 'ARGS=+map mp_shipment' qmcgaw/cod4
@@ -63,22 +61,31 @@ Two options:
         1. Copy all the files from `/mycod4path/zone` to `yourpath/zone`
         1. Copy the mods you want to use from `/mycod4path/mods` to `yourpath/mods`
         1. Copy the maps you want to use from `/mycod4path/usermaps` to `yourpath/usermaps`
-    1. Enter
+    1. Enter (make sure to change paths):
 
         ```bash   
-        docker run -d --name=cod4 --restart=always -p 28960:28960/udp \
+        docker run -d --name=cod4 --restart=always -p 28960/udp:28960/udp \
             -v /yourpath/main:/cod4/main -v /yourpath/zone:/cod4/zone \
             -v /yourpath/mods:/cod4/mods -v /yourpath/usermaps:/cod4/usermaps \
             -e 'ARGS=+map mp_shipment' qmcgaw/cod4
         ```
 
-- The container port UDP 28960 is forwarded to the host port UDP 28960
-- The following environment variables are set with the flag `-e`:
+A few notes:
+- The container UDP port 28960 is forwarded to the host UDP port 28960
+- The environment variable ARGS is optional and defaults to `+map_rotate`
 
-| **Environement variable** | **Value** | *Optional* |
-| --- | --- | --- |
-| ARGS | Arguments to cod4x executable | Yes, `+map_rotate` |
+#### Apache HTTP server
 
+If you want your clients to automatically download your mods and usermaps launch a container with:
+
+```bash
+docker run -d --name=cod4-http -p 8000/tcp:80/tcp --restart=always \
+-v /yourpath/mods:/usr/local/apache2/htdocs/mods \
+-v /yourpath/usermaps:/usr/local/apache2/htdocs/usermaps httpd:alpine
+```
+
+Note that you can change the `8000` port to any port you like and you will have to reflect the changes 
+in the configuration of your server. TODO
 
 ### Using Docker Compose
 
@@ -91,12 +98,18 @@ Set `ARGS` to `+set fs_game mods/SERVER+map_rotate`
 
 ## Testing
 
-1. Run a COD4 client and try to connect to `yourhostIPaddress:28960`
+Run a COD4 client and try to connect to your host LAN IP Address (i.e. `192.168.1.26`)
+
+Note that you need to append `:28967` to the server name if you set the port to something else
+than 28960 (default port).
+
 
 ## To dos
 
-- Run on Alpine (half the image size)
-- Finish readme and add screenshots
-- Combine FTP server in docker-compose
-- Show online status
 - Instructions for client to update
+- Finish mods section
+- FInish Apache FTP doc and test
+- Combine FTP server in docker-compose
+- Finish readme and add screenshots
+- Run on Alpine (half the image size)
+- Show online status

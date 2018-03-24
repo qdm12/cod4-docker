@@ -1,9 +1,7 @@
 #!/bin/sh
 
-wget https://cod4x.me/downloads/cod4x_server-linux.zip
-unzip -o cod4x_server-linux.zip
-rm cod4x_server-linux.zip
-chmod +x cod4x18_dedrun
+# /cod4/main is now mounted so move xbase_00.iwd
+mv /cod4/xbase_00.iwd /cod4/main/xbase_00.iwd
 if [ -z "${ARGS}" ]; then
     ARGS="+map_rotate"
 fi
