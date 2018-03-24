@@ -32,62 +32,27 @@ It is based on:
 
 ## Installation
 
-### Using Docker only
-
-#### Cod4x Server
-
 We assume your *call of duty 4 game* is installed at `/mycod4path`
 
-Two options:
+1. On your host, create the following directories:
+    - `/yourpath/main`
+    - `/yourpath/zone`
+    - `/yourpath/mods`
+    - `/yourpath/usermaps`
+1. From your Call of Duty 4 installation directory:
+    1. Copy all the `.iwd` files from `/mycod4path/main` to `/yourpath/main`
+    1. Copy all the files from `/mycod4path/zone` to `/yourpath/zone`
+    1. (Optional) Copy the mods you want to use from `/mycod4path/mods` to `/yourpath/mods`
+    1. (Optional) Copy the maps you want to use from `/mycod4path/usermaps` to `/yourpath/usermaps`
 
-- Directly mount your call of duty 4 directories
-    1. Create the directories `mods` and `usermaps` in `mycod4path` if they don't exist
-    1. Enter (make sure to change paths):
+### Option 1 of 2: Using Docker Compose
 
-        ```bash   
-        docker run -d --name=cod4 --restart=always -p 28960:28960/udp \
-            -v /mycod4path/main:/cod4/main -v /mycod4path/zone:/cod4/zone \
-            -v /mycod4path/mods:/cod4/mods -v /mycod4path/usermaps:/cod4/usermaps \
-            -e 'ARGS=+map mp_shipment' qmcgaw/cod4
-        ```
-
-- Copy some call of duty 4 directories for a fresh server install
-    1. On your host, create the following directories:
-        - `yourpath/main`
-        - `yourpath/zone`
-        - `yourpath/mods`
-        - `yourpath/usermaps`
-    1. From your Call of Duty 4 installation directory:
-        1. Copy all the `.iwd` files from `/mycod4path/main` to `yourpath/main`
-        1. Copy all the files from `/mycod4path/zone` to `yourpath/zone`
-        1. Copy the mods you want to use from `/mycod4path/mods` to `yourpath/mods`
-        1. Copy the maps you want to use from `/mycod4path/usermaps` to `yourpath/usermaps`
-    1. Enter (make sure to change paths):
-
-        ```bash   
-        docker run -d --name=cod4 --restart=always -p 28960:28960/udp \
-            -v /yourpath/main:/cod4/main -v /yourpath/zone:/cod4/zone \
-            -v /yourpath/mods:/cod4/mods -v /yourpath/usermaps:/cod4/usermaps \
-            -e 'ARGS=+map mp_shipment' qmcgaw/cod4
-        ```
-
-A few notes:
-- The container UDP port 28960 is forwarded to the host UDP port 28960
-- The environment variable ARGS is optional and defaults to `+map_rotate`
-
-#### Apache HTTP server
-
-If you want your clients to automatically download your mods and usermaps:
-1. Launch a lightweight HTTP server container with:
-
-    ```bash
-    docker run -d --name=cod4-http -p 8000:80/tcp --restart=always \
-    -v /yourpath/mods:/usr/local/apache2/htdocs/mods \
-    -v /yourpath/usermaps:/usr/local/apache2/htdocs/usermaps httpd:alpine
-    ```
-    
-    Note that you can change the `8000` port to any port you like.
-1. In your mod configuration file, say `server.cfg`, add the following lines:
+1. Download [docker-compose.yml](https://raw.githubusercontent.com/qdm12/cod4-docker/master/docker-compose.yml)
+1. Edit *docker-compose.yml* and replace:
+    - `/yourpath` with your actual host path
+    - (Optional) the port mappings of each of the 2 containers
+    - (Optional) `+map mp_shipment` with the argument you want (i.e. to use mods)
+1. In your configuration file, say `server.cfg`, add the following lines:
 
     ```c
     set sv_allowdownload "1"
@@ -102,12 +67,55 @@ If you want your clients to automatically download your mods and usermaps:
     - A domain name `http://mydomain.com:8000` (depends on port forwarding on your router)
     - A domain name with https `https://mydomain.com:8000` (depends on port forwarding on your router)
     - Even FTP (unsure) `ftp://mydomain.com:8001` (depends on port forwarding on your router)
+1. Launch the two containers with:
 
-### Using Docker Compose
+    ```bash   
+    docker-compose up -d
+    ```
 
+### Option 2 of 2: Using Docker only
 
+#### Cod4x Server
 
+In a terminal, enter (make sure to change paths):
 
+```bash   
+docker run -d --name=cod4 --restart=always -p 28960:28960/udp \
+    -v /yourpath/main:/cod4/main -v /yourpath/zone:/cod4/zone \
+    -v /yourpath/mods:/cod4/mods -v /yourpath/usermaps:/cod4/usermaps \
+    -e 'ARGS=+map mp_shipment' qmcgaw/cod4
+```
+
+- The container UDP port 28960 is forwarded to the host UDP port 28960
+- The environment variable ARGS is optional and defaults to `+map_rotate`
+
+#### Apache HTTP server (Optional)
+
+If you want your clients to automatically download your mods and usermaps:
+1. Launch a lightweight HTTP server container with:
+
+    ```bash
+    docker run -d --name=cod4-http -p 8000:80/tcp --restart=always \
+    -v /yourpath/mods:/usr/local/apache2/htdocs/mods \
+    -v /yourpath/usermaps:/usr/local/apache2/htdocs/usermaps httpd:alpine
+    ```
+    
+    Note that you can change the `8000` port to any port you like.
+1. In your configuration file, say `server.cfg`, add the following lines:
+
+    ```c
+    set sv_allowdownload "1"
+    set sv_wwwDownload "1"
+    set sv_wwwBaseURL "http://youraddress"
+    set sv_wwwDlDisconnected "0"
+    ```
+
+    Note that `http://youraddress` can be:
+    - A LAN IP address `http://192.168.1.16:8000`
+    - An external IP address `http://124.265.140.25:8000` (depends on port forwarding on your router)
+    - A domain name `http://mydomain.com:8000` (depends on port forwarding on your router)
+    - A domain name with https `https://mydomain.com:8000` (depends on port forwarding on your router)
+    - Even FTP (unsure) `ftp://mydomain.com:8001` (depends on port forwarding on your router)
 
 ## Mods
 
