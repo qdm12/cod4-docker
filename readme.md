@@ -154,6 +154,8 @@ Set the environment variable `ARGS` to:
 - docker-compose section
 - Finish readme and add screenshots
 - Allow 64 players for ROTU servers i.e.
+- Default config
+- Plugins (see https://hub.docker.com/r/callofduty4x/cod4x18-server/)
 - Leetmode
 - Run on Alpine (half the image size)
 - Show online status
