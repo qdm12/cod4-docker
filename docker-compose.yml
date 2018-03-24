@@ -4,10 +4,10 @@ services:
         image: qmcgaw/cod4
         container_name: cod4
         volumes:
-            - /yourpath/main:/cod4/main
-            - /yourpath/zone:/cod4/zone
+            - /yourpath/main:/cod4/main:ro
+            - /yourpath/zone:/cod4/zone:ro
             - /yourpath/mods:/cod4/mods
-            - /yourpath/usermaps:/cod4/usermaps
+            - /yourpath/usermaps:/cod4/usermaps:ro
         environment:
             - ARGS=+map mp_shipment
         ports:
@@ -18,8 +18,8 @@ services:
         image: httpd:alpine
         container_name: cod4-http
         volumes:
-            - /yourpath/mods:/usr/local/apache2/htdocs/mods
-            - /yourpath/usermaps:/usr/local/apache2/htdocs/usermaps
+            - /yourpath/mods:/usr/local/apache2/htdocs/mods:ro
+            - /yourpath/usermaps:/usr/local/apache2/htdocs/usermaps:ro
         ports:
             - 8000:80
         network_mode: bridge

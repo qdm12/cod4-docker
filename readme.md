@@ -151,7 +151,6 @@ Set the environment variable `ARGS` to:
 
 ## To dos
 
-- docker-compose section
 - Finish readme and add screenshots
 - Allow 64 players for ROTU servers i.e.
 - Default config
