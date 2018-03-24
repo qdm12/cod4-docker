@@ -10,7 +10,7 @@ Docker build:
 Cod4x build:
 [![Build Status](https://travis-ci.org/callofduty4x/CoD4x_Server.svg?branch=master)](https://travis-ci.org/callofduty4x/CoD4x_Server)
 
-This image is **351 MB** and consumes **443 MB** of RAM (no player)
+This image is **373 MB** and consumes **368 MB** of RAM (no player)
 
 It is based on:
 - [Cod4x](https://cod4x.me/) Linux Server
@@ -44,7 +44,7 @@ Two options:
     1. Enter (make sure to change paths):
 
         ```bash   
-        docker run -d --name=cod4 --restart=always -p 28960/udp:28960/udp \
+        docker run -d --name=cod4 --restart=always -p 28960:28960/udp \
             -v /mycod4path/main:/cod4/main -v /mycod4path/zone:/cod4/zone \
             -v /mycod4path/mods:/cod4/mods -v /mycod4path/usermaps:/cod4/usermaps \
             -e 'ARGS=+map mp_shipment' qmcgaw/cod4
@@ -64,7 +64,7 @@ Two options:
     1. Enter (make sure to change paths):
 
         ```bash   
-        docker run -d --name=cod4 --restart=always -p 28960/udp:28960/udp \
+        docker run -d --name=cod4 --restart=always -p 28960:28960/udp \
             -v /yourpath/main:/cod4/main -v /yourpath/zone:/cod4/zone \
             -v /yourpath/mods:/cod4/mods -v /yourpath/usermaps:/cod4/usermaps \
             -e 'ARGS=+map mp_shipment' qmcgaw/cod4
@@ -94,7 +94,7 @@ in the configuration of your server. TODO
 
 ### Mods
 
-Set `ARGS` to `+set fs_game mods/SERVER+map_rotate`
+Set the environment variable `ARGS` to `+set fs_game mods/YourModName +exec yourConfigurationName.cfg +map_rotate`
 
 ## Testing
 

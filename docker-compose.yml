@@ -11,6 +11,6 @@ services:
         environment:
             - ARGS=+map mp_shipment
         ports:
-            - 28960/udp:28960/udp
+            - 28960:28960/udp
         network_mode: bridge
         restart: always
