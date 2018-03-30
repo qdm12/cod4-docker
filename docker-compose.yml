@@ -4,12 +4,12 @@ services:
         image: qmcgaw/cod4
         container_name: cod4
         volumes:
-            - /yourpath/main:/cod4/main:ro
+            - /yourpath/main:/cod4/main
             - /yourpath/zone:/cod4/zone:ro
             - /yourpath/mods:/cod4/mods
             - /yourpath/usermaps:/cod4/usermaps:ro
         environment:
-            - ARGS=+map mp_shipment
+            - ARGS=+set dedicated 2+set sv_cheats "1"+set sv_maxclients "64"+exec server.cfg+map_rotate
         ports:
             - 28960:28960/udp
         network_mode: bridge

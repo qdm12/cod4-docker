@@ -10,7 +10,7 @@ Docker build:
 Cod4x build:
 [![Build Status](https://travis-ci.org/callofduty4x/CoD4x_Server.svg?branch=master)](https://travis-ci.org/callofduty4x/CoD4x_Server)
 
-This image is **373 MB** and consumes **368 MB** of RAM (no player)
+This image is **363 MB** and consumes **300-400 MB** of RAM without mods
 
 It is based on:
 - [Cod4x](https://cod4x.me/) Linux Server
@@ -19,9 +19,9 @@ It is based on:
     
 ## Requirements
 
+- COD4 Client game running on Windows
 - COD4 running on version 1.7 have to [update to 1.8](#update-your-game)
 - Original COD4 **main** and **zone** files required
-- COD4 Client game running on Windows
 
 ## Features
 
@@ -29,6 +29,10 @@ It is based on:
 - Works with custom mods and maps (see the [Mods section](#Mods))
 - Easily configurable with [docker-compose](#using-docker-compose)
 - Run a lightweight Apache HTTP server for your clients to download your mods and usermaps
+- Default cod4 configuration file [server.cfg](https://github.com/qdm12/cod4-docker/blob/master/server.cfg)
+    - Placed into `/yourpath/main`
+    - Launched by default when not using mods with `exec server.cfg`
+    - Easily changeable
 
 ## Installation
 
@@ -47,27 +51,24 @@ We assume your *call of duty 4 game* is installed at `/mycod4path`
 
 ### Option 1 of 2: Using Docker Compose
 
-1. Download [docker-compose.yml](https://raw.githubusercontent.com/qdm12/cod4-docker/master/docker-compose.yml)
+1. Download [*docker-compose.yml*](https://raw.githubusercontent.com/qdm12/cod4-docker/master/docker-compose.yml)
 1. Edit *docker-compose.yml* and replace:
     - `/yourpath` with your actual host path
+    - (Optional) the value of `ARGS` with the argument you want (i.e. to use [mods](#Mods))
     - (Optional) the port mappings of each of the 2 containers
-    - (Optional) `+map mp_shipment` with the argument you want (i.e. to use mods)
-1. In your configuration file, say `server.cfg`, add the following lines:
+1. To allow clients to download your mod and/or custom maps:
+    1. Locate the relevant configuration file - for example `main/server.cfg` or `mods/mymod/server.cfg`
+    1. Modify/Add the following lines & change `youraddress` to your IP or domain name:
 
-    ```c
-    set sv_allowdownload "1"
-    set sv_wwwDownload "1"
-    set sv_wwwBaseURL "http://youraddress"
-    set sv_wwwDlDisconnected "0"
-    ```
+        ```c
+        set sv_allowdownload "1"
+        set sv_wwwDownload "1"
+        set sv_wwwBaseURL "http://youraddress:8000" // supports http, https and ftp addresses
+        set sv_wwwDlDisconnected "0"
+        ```
 
-    Note that `http://youraddress` can be:
-    - A LAN IP address `http://192.168.1.16:8000`
-    - An external IP address `http://124.265.140.25:8000` (depends on port forwarding on your router)
-    - A domain name `http://mydomain.com:8000` (depends on port forwarding on your router)
-    - A domain name with https `https://mydomain.com:8000` (depends on port forwarding on your router)
-    - Even FTP (unsure) `ftp://mydomain.com:8001` (depends on port forwarding on your router)
-1. Launch the two containers with:
+    1. You will have to setup port forwarding on your router. Ask me if you need help or Google.
+1. Launch the two containers in the background with:
 
     ```bash   
     docker-compose up -d
@@ -87,11 +88,11 @@ docker run -d --name=cod4 --restart=always -p 28960:28960/udp \
 ```
 
 - The container UDP port 28960 is forwarded to the host UDP port 28960
-- The environment variable ARGS is optional and defaults to `+map_rotate`
+- The environment variable ARGS is optional and defaults to `+set dedicated 2+set sv_cheats "1"+set sv_maxclients "64"+exec server.cfg+map_rotate`
 
 #### Apache HTTP server (Optional)
 
-If you want your clients to automatically download your mods and usermaps:
+To allow clients to download your mod and/or custom maps
 1. Launch a lightweight HTTP server container with:
 
     ```bash
@@ -101,32 +102,18 @@ If you want your clients to automatically download your mods and usermaps:
     ```
     
     Note that you can change the `8000` port to any port you like.
-1. In your configuration file, say `server.cfg`, add the following lines:
+    
+1. Locate the relevant configuration file - for example `main/server.cfg` or `mods/mymod/server.cfg`
+1. Modify/Add the following lines & change `youraddress` to your IP or domain name:
 
     ```c
     set sv_allowdownload "1"
     set sv_wwwDownload "1"
-    set sv_wwwBaseURL "http://youraddress"
+    set sv_wwwBaseURL "http://youraddress:8000" // supports http, https and ftp addresses
     set sv_wwwDlDisconnected "0"
     ```
 
-    Note that `http://youraddress` can be:
-    - A LAN IP address `http://192.168.1.16:8000`
-    - An external IP address `http://124.265.140.25:8000` (depends on port forwarding on your router)
-    - A domain name `http://mydomain.com:8000` (depends on port forwarding on your router)
-    - A domain name with https `https://mydomain.com:8000` (depends on port forwarding on your router)
-    - Even FTP (unsure) `ftp://mydomain.com:8001` (depends on port forwarding on your router)
-
-## Mods
-
-Assuming:
-- Your mod directory is `mymod` in `/yourpath/mods/`
-- Your main configuration file is `server.cfg` in `/yourpath/mods/mymod/`
-
-Set the environment variable `ARGS` to:
-```
-+set fs_game mods/mymod +exec server.cfg +map_rotate
-```
+1. You will have to setup port forwarding on your router. Ask me if you need help or Google.
 
 ## Update your game
 
@@ -149,15 +136,40 @@ Set the environment variable `ARGS` to:
     - Add the port if you run it on something else than port UDP 28960 (i.e. `192.168.1.26:28961`)
 1. Click on **Refresh** and try to connect to the server in the list
 
+![COD4 screenshot](https://github.com/qdm12/cod4-docker/blob/master/readme/test.png)
+
+## Mods
+
+Assuming:
+- Your mod directory is `mymod` in `/yourpath/mods/`
+- Your main mod configuration file is `server.cfg` in `/yourpath/mods/mymod/`
+
+Set the environment variable `ARGS` to:
+
+`+set dedicated 2+set sv_cheats "1"+set sv_maxclients "64"+set fs_game mods/mymod+exec server.cfg +map_rotate`
+
+## Write protected args
+
+The following parameters are write protected and **can't be placed in the server configuration 
+file**, and must be in the `ARGS` environment variable:
+- `+set dedicated 2` - 2: open to internet, 1: LAN, 0: localhost
+- `+set sv_cheats "1"` - 1 to allow cheats, 0 otherwise
+- `+set sv_maxclients "64"` - number of maximum clients
+- `+exec server.cfg` if using a configuration file
+- `+set fs_game mods/mymod` if using a custom mod
+- `+set com_hunkMegs "512"` don't use if not needed
+- `+set net_ip 127.0.0.1` don't use if not needed
+- `+set net_port 28961` don't use if not needed
+- `+map_rotate` OR i.e. `+map mp_shipment` **should be the last launch argument**
+
+
 ## To dos
 
-- Finish readme and add screenshots
-- Allow 64 players for ROTU servers i.e.
-- Default config
-- Plugins (see https://hub.docker.com/r/callofduty4x/cod4x18-server/)
+- Run as non root
+- Easily switch between mods: script file
 - Leetmode
+- Plugins (see https://hub.docker.com/r/callofduty4x/cod4x18-server/)
 - Run on Alpine (half the image size)
-- Show online status
 
 ## Acknowledgements
 
