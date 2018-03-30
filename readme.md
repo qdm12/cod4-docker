@@ -123,7 +123,7 @@ To allow clients to download your mod and/or custom maps
 1. Double click on **install.cmd** that you just extracted
 1. When launching the multiplayer game, you should see at the bottom right:
 
-![Bottom right screen cod4x](https://github.com/qdm12/cod4-docker/blob/master/readme/cod4x-update.png)
+![Bottom right screen cod4x](https://github.com/qdm12/cod4-docker/blob/master/readme/cod4x-update.png?raw=true)
 
 ## Testing
 
@@ -136,7 +136,7 @@ To allow clients to download your mod and/or custom maps
     - Add the port if you run it on something else than port UDP 28960 (i.e. `192.168.1.26:28961`)
 1. Click on **Refresh** and try to connect to the server in the list
 
-![COD4 screenshot](https://github.com/qdm12/cod4-docker/blob/master/readme/test.png)
+![COD4 screenshot](https://github.com/qdm12/cod4-docker/blob/master/readme/test.png?raw=true)
 
 ## Mods
 
@@ -165,10 +165,10 @@ file**, and must be in the `ARGS` environment variable:
 
 ## To dos
 
-- Run as non root
 - Easily switch between mods: script file
 - Leetmode
 - Plugins (see https://hub.docker.com/r/callofduty4x/cod4x18-server/)
+- Run as non root (problems with mounted permissions)
 - Run on Alpine (half the image size)
 
 ## Acknowledgements
