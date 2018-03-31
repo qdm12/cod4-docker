@@ -11,6 +11,8 @@ Cod4x build:
 [![Build Status](https://travis-ci.org/callofduty4x/CoD4x_Server.svg?branch=master)](https://travis-ci.org/callofduty4x/CoD4x_Server)
 
 This image is **363 MB** and consumes **300-400 MB** of RAM without mods
+[![](https://images.microbadger.com/badges/image/qmcgaw/cod4.svg)](https://microbadger.com/images/qmcgaw/cod4 "Get your own image badge on microbadger.com")
+[![](https://images.microbadger.com/badges/version/qmcgaw/cod4.svg)](https://microbadger.com/images/qmcgaw/cod4 "Get your own version badge on microbadger.com")
 
 It is based on:
 - [Cod4x](https://cod4x.me/) Linux Server

@@ -1,5 +1,7 @@
 FROM debian
-MAINTAINER Quentin McGaw <quentin.mcgaw@gmail.com>
+LABEL maintainer="quentin.mcgaw@gmail.com" \
+      description="Runs a Call of duty 4 Modern Warfare dedicated server in a Docker container" \
+      github="https://github.com/qdm12/cod4-docker"
 EXPOSE 28960
 RUN mkdir /cod4 && cd /cod4 && \
     apt-get update -qq > /dev/null && \
