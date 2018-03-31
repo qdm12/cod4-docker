@@ -4,15 +4,18 @@ Runs a Call of duty 4 Modern Warfare dedicated server in a Docker container.
 
 [![Docker Cod4](https://github.com/qdm12/cod4-docker/raw/master/readme/title.png)](https://hub.docker.com/r/qmcgaw/cod4/)
 
-Docker build:
+Docker build
+
 [![Build Status](https://travis-ci.org/qdm12/cod4-docker.svg?branch=master)](https://travis-ci.org/qdm12/cod4-docker)
 
-Cod4x build:
+Cod4x build
+
 [![Build Status](https://travis-ci.org/callofduty4x/CoD4x_Server.svg?branch=master)](https://travis-ci.org/callofduty4x/CoD4x_Server)
 
+[![](https://images.microbadger.com/badges/image/qmcgaw/cod4.svg)](https://microbadger.com/images/qmcgaw/cod4)
+[![](https://images.microbadger.com/badges/version/qmcgaw/cod4.svg)](https://microbadger.com/images/qmcgaw/cod4)
+
 This image is **363 MB** and consumes **300-400 MB** of RAM without mods
-[![](https://images.microbadger.com/badges/image/qmcgaw/cod4.svg)](https://microbadger.com/images/qmcgaw/cod4 "Get your own image badge on microbadger.com")
-[![](https://images.microbadger.com/badges/version/qmcgaw/cod4.svg)](https://microbadger.com/images/qmcgaw/cod4 "Get your own version badge on microbadger.com")
 
 It is based on:
 - [Cod4x](https://cod4x.me/) Linux Server
