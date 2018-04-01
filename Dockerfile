@@ -1,8 +1,10 @@
 FROM debian
 LABEL maintainer="quentin.mcgaw@gmail.com" \
       description="Runs a Call of duty 4 Modern Warfare dedicated server in a Docker container" \
+      download="132.8MB" \
       size="363MB" \
       ram="350MB to 500MB" \
+      cpu_usage="Low" \
       github="https://github.com/qdm12/cod4-docker"
 EXPOSE 28960
 RUN mkdir /cod4 && cd /cod4 && \

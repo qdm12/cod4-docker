@@ -15,7 +15,9 @@ Cod4x build
 [![](https://images.microbadger.com/badges/image/qmcgaw/cod4.svg)](https://microbadger.com/images/qmcgaw/cod4)
 [![](https://images.microbadger.com/badges/version/qmcgaw/cod4.svg)](https://microbadger.com/images/qmcgaw/cod4)
 
-This image is **363 MB** and consumes **300-400 MB** of RAM without mods
+| Download size | Image size | RAM usage | CPU usage |
+| --- | --- | --- | --- |
+| 132.8MB | 363MB | 300MB to 400MB | Low |
 
 It is based on:
 - [Cod4x](https://cod4x.me/) Linux Server
