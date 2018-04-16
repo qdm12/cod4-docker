@@ -4,24 +4,33 @@ Runs a Call of duty 4 Modern Warfare dedicated server in a Docker container.
 
 [![Docker Cod4](https://github.com/qdm12/cod4-docker/raw/master/readme/title.png)](https://hub.docker.com/r/qmcgaw/cod4/)
 
-Docker build
-
-[![Build Status](https://travis-ci.org/qdm12/cod4-docker.svg?branch=master)](https://travis-ci.org/qdm12/cod4-docker)
-
 Cod4x build
 
 [![Build Status](https://travis-ci.org/callofduty4x/CoD4x_Server.svg?branch=master)](https://travis-ci.org/callofduty4x/CoD4x_Server)
+
+Docker build
+
+[![Build Status](https://travis-ci.org/qdm12/cod4-docker.svg?branch=master)](https://travis-ci.org/qdm12/cod4-docker)
+[![Docker Build Status](https://img.shields.io/docker/build/qmcgaw/cod4.svg)](https://hub.docker.com/r/qmcgaw/cod4)
+
+[![GitHub last commit](https://img.shields.io/github/last-commit/qdm12/cod4-docker.svg)](https://github.com/qdm12/cod4-docker/issues)
+[![GitHub commit activity](https://img.shields.io/github/commit-activity/y/qdm12/cod4-docker.svg)](https://github.com/qdm12/cod4-docker/issues)
+[![GitHub issues](https://img.shields.io/github/issues/qdm12/cod4-docker.svg)](https://github.com/qdm12/cod4-docker/issues)
+
+[![Docker Pulls](https://img.shields.io/docker/pulls/qmcgaw/cod4.svg)](https://hub.docker.com/r/qmcgaw/cod4)
+[![Docker Stars](https://img.shields.io/docker/stars/qmcgaw/cod4.svg)](https://hub.docker.com/r/qmcgaw/cod4)
+[![Docker Automated](https://img.shields.io/docker/automated/qmcgaw/cod4.svg)](https://hub.docker.com/r/qmcgaw/cod4)
 
 [![](https://images.microbadger.com/badges/image/qmcgaw/cod4.svg)](https://microbadger.com/images/qmcgaw/cod4)
 [![](https://images.microbadger.com/badges/version/qmcgaw/cod4.svg)](https://microbadger.com/images/qmcgaw/cod4)
 
 | Download size | Image size | RAM usage | CPU usage |
 | --- | --- | --- | --- |
-| 132.8MB | 363MB | 300MB to 400MB | Low |
+| 132.8MB | 305MB | 300MB to 400MB | Low |
 
 It is based on:
 - [Cod4x](https://cod4x.me/) Linux Server
-- Debian
+- Debian stretch slim
 - g++-multilib
     
 ## Requirements
@@ -170,9 +179,9 @@ file**, and must be in the `ARGS` environment variable:
 - `+map_rotate` OR i.e. `+map mp_shipment` **should be the last launch argument**
 
 
-## To dos
+## To do eventually
 
-- Easily switch between mods: script file
+- Easily switch between mods: script file or management tool
 - Leetmode
 - Plugins (see https://hub.docker.com/r/callofduty4x/cod4x18-server/)
 - Run as non root (problems with mounted permissions)
