@@ -26,7 +26,7 @@ Docker build
 
 | Download size | Image size | RAM usage | CPU usage |
 | --- | --- | --- | --- |
-| 132.8MB | 305MB | 300MB to 400MB | Low |
+| 105.4MB | 305MB | 300MB to 400MB | Low |
 
 It is based on:
 - [Cod4x](https://cod4x.me/) Linux Server

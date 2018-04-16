@@ -1,7 +1,7 @@
 FROM debian:stretch-slim
 LABEL maintainer="quentin.mcgaw@gmail.com" \
       description="Runs a Call of duty 4 Modern Warfare dedicated server in a Docker container" \
-      download="132.7MB" \
+      download="105.4MB" \
       size="305MB" \
       ram="350MB to 500MB" \
       cpu_usage="Low" \
