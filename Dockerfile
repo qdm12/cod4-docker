@@ -25,6 +25,6 @@ VOLUME /cod4/main /cod4/zone /cod4/mods /cod4/usermaps
 WORKDIR /cod4
 ENV ARGS +set dedicated 2+set sv_cheats "1"+set sv_maxclients "64"+exec server.cfg+map_rotate
 ENTRYPOINT cp -f /cod4/xbase_00.iwd /cod4/main/xbase_00.iwd && \
-           cp /cod4/server.cfg /cod4/main/server.cfg && \
+           cp -n /cod4/server.cfg /cod4/main/server.cfg && \
            echo "Arguments are: ${ARGS}" && \
            ./cod4x18_dedrun "${ARGS}"
