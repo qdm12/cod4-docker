@@ -97,7 +97,7 @@ We assume your *call of duty 4 game* is installed at `/mycod4path`
 In a terminal, enter (make sure to change paths):
 
 ```bash   
-docker run -d --name=cod4 --restart=always -p 28960:28960/udp \
+docker run -d --name=cod4 --restart=always -p 28960:28960/udp -p 28960:28960 \
     -v /yourpath/main:/cod4/main -v /yourpath/zone:/cod4/zone \
     -v /yourpath/mods:/cod4/mods -v /yourpath/usermaps:/cod4/usermaps \
     -e 'ARGS=+map mp_shipment' qmcgaw/cod4
