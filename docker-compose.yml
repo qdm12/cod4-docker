@@ -12,6 +12,7 @@ services:
             - ARGS=+set dedicated 2+set sv_cheats "1"+set sv_maxclients "64"+exec server.cfg+map_rotate
         ports:
             - 28960:28960/udp
+            - 28960:28960
         network_mode: bridge
         restart: always
     http:
