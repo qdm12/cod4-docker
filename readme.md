@@ -1,6 +1,6 @@
 # COD4 Docker dedicated server
 
-Runs a Call of duty 4 Modern Warfare dedicated server in a Docker container.
+*Runs a Call of duty 4 Modern Warfare dedicated server in a Docker container*
 
 [![Docker Cod4](https://github.com/qdm12/cod4-docker/raw/master/readme/title.png)](https://hub.docker.com/r/qmcgaw/cod4/)
 
@@ -29,10 +29,11 @@ Docker build
 | 105.4MB | 305MB | 300MB to 400MB | Low |
 
 It is based on:
+
 - [Cod4x](https://cod4x.me/) Linux Server
 - Debian stretch slim
 - g++-multilib
-    
+
 ## Requirements
 
 - COD4 Client game running on Windows
@@ -86,7 +87,7 @@ We assume your *call of duty 4 game* is installed at `/mycod4path`
     1. You will have to setup port forwarding on your router. Ask me if you need help or Google.
 1. Launch the two containers in the background with:
 
-    ```bash   
+    ```bash
     docker-compose up -d
     ```
 
@@ -96,7 +97,7 @@ We assume your *call of duty 4 game* is installed at `/mycod4path`
 
 In a terminal, enter (make sure to change paths):
 
-```bash   
+```bash
 docker run -d --name=cod4 --restart=always -p 28960:28960/udp \
     -v /yourpath/main:/cod4/main -v /yourpath/zone:/cod4/zone \
     -v /yourpath/mods:/cod4/mods -v /yourpath/usermaps:/cod4/usermaps \
@@ -109,6 +110,7 @@ docker run -d --name=cod4 --restart=always -p 28960:28960/udp \
 #### Apache HTTP server (Optional)
 
 To allow clients to download your mod and/or custom maps
+
 1. Launch a lightweight HTTP server container with:
 
     ```bash
@@ -116,9 +118,9 @@ To allow clients to download your mod and/or custom maps
     -v /yourpath/mods:/usr/local/apache2/htdocs/mods \
     -v /yourpath/usermaps:/usr/local/apache2/htdocs/usermaps httpd:alpine
     ```
-    
+
     Note that you can change the `8000` port to any port you like.
-    
+
 1. Locate the relevant configuration file - for example `main/server.cfg` or `mods/mymod/server.cfg`
 1. Modify/Add the following lines & change `youraddress` to your IP or domain name:
 
@@ -157,6 +159,7 @@ To allow clients to download your mod and/or custom maps
 ## Mods
 
 Assuming:
+
 - Your mod directory is `mymod` in `/yourpath/mods/`
 - Your main mod configuration file is `server.cfg` in `/yourpath/mods/mymod/`
 
@@ -168,6 +171,7 @@ Set the environment variable `ARGS` to:
 
 The following parameters are write protected and **can't be placed in the server configuration 
 file**, and must be in the `ARGS` environment variable:
+
 - `+set dedicated 2` - 2: open to internet, 1: LAN, 0: localhost
 - `+set sv_cheats "1"` - 1 to allow cheats, 0 otherwise
 - `+set sv_maxclients "64"` - number of maximum clients
@@ -177,7 +181,6 @@ file**, and must be in the `ARGS` environment variable:
 - `+set net_ip 127.0.0.1` don't use if not needed
 - `+set net_port 28961` don't use if not needed
 - `+map_rotate` OR i.e. `+map mp_shipment` **should be the last launch argument**
-
 
 ## To do eventually
 
@@ -191,4 +194,3 @@ file**, and must be in the `ARGS` environment variable:
 
 - Credits to the developers of Cod4x server
 - The help I had on [Cod4x.me forums](https://cod4x.me/index.php?/forums/)
-
