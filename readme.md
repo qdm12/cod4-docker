@@ -2,7 +2,7 @@
 
 *Runs a Call of duty 4 Modern Warfare dedicated server in a Docker container*
 
-[![Docker Cod4](https://github.com/qdm12/cod4-docker/raw/master/readme/title.png)](https://hub.docker.com/r/qmcgaw/cod4/)
+[![Docker Cod4](https://github.com/qdm12/cod4-docker/raw/master/images/title.png)](https://hub.docker.com/r/qmcgaw/cod4/)
 
 Cod4x build
 
@@ -141,7 +141,7 @@ To allow clients to download your mod and/or custom maps
 1. Double click on **install.cmd** that you just extracted
 1. When launching the multiplayer game, you should see at the bottom right:
 
-![Bottom right screen cod4x](https://github.com/qdm12/cod4-docker/blob/master/readme/cod4x-update.png?raw=true)
+![Bottom right screen cod4x](https://github.com/qdm12/cod4-docker/blob/master/images/cod4x-update.png?raw=true)
 
 ## Testing
 
@@ -154,7 +154,7 @@ To allow clients to download your mod and/or custom maps
     - Add the port if you run it on something else than port UDP 28960 (i.e. `192.168.1.26:28961`)
 1. Click on **Refresh** and try to connect to the server in the list
 
-![COD4 screenshot](https://github.com/qdm12/cod4-docker/blob/master/readme/test.png?raw=true)
+![COD4 screenshot](https://github.com/qdm12/cod4-docker/blob/master/images/test.png?raw=true)
 
 ## Mods
 
