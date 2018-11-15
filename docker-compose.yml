@@ -1,26 +1,27 @@
 version: '3'
 services:
-    cod4:
-        image: qmcgaw/cod4
-        container_name: cod4
-        volumes:
-            - /yourpath/main:/cod4/main
-            - /yourpath/zone:/cod4/zone:ro
-            - /yourpath/mods:/cod4/mods
-            - /yourpath/usermaps:/cod4/usermaps:ro
-        environment:
-            - ARGS=+set dedicated 2+set sv_cheats 1+set sv_maxclients 64+set ui_maxclients 64+exec server.cfg+map_rotate
-        ports:
-            - 28960:28960/udp
-        network_mode: bridge
-        restart: always
-    http:
-        image: httpd:alpine
-        container_name: cod4-http
-        volumes:
-            - /yourpath/mods:/usr/local/apache2/htdocs/mods:ro
-            - /yourpath/usermaps:/usr/local/apache2/htdocs/usermaps:ro
-        ports:
-            - 8000:80
-        network_mode: bridge
-        restart: always
+  cod4:
+    image: qmcgaw/cod4
+    container_name: cod4
+    volumes:
+      - /yourpath/main:/cod4/main
+      - /yourpath/zone:/cod4/zone:ro
+      - /yourpath/mods:/cod4/mods
+      - /yourpath/usermaps:/cod4/usermaps:ro
+    environment:
+      - ARGS=+set dedicated 2+set sv_cheats 1+set sv_maxclients 64+set ui_maxclients 64+exec server.cfg+map_rotate
+    ports:
+      - 28960:28960/udp
+    network_mode: bridge
+    restart: always
+  # =>>> http server to server mods and usermaps
+  #http:
+  #  image: httpd:alpine
+  #  container_name: cod4-http
+  #  volumes:
+  #    - ./mods:/usr/local/apache2/htdocs/mods:ro
+  #    - ./usermaps:/usr/local/apache2/htdocs/usermaps:ro
+  #  ports:
+  #    - 8000:80
+  #  network_mode: bridge
+  #  restart: always

@@ -3,4 +3,4 @@
 .git/
 docker-compose.yml
 readme.md
-readme/
+images
