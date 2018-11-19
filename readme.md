@@ -1,14 +1,10 @@
 # COD4 Docker dedicated server
 
-*Call of duty 4 dedicated server in a lightweight container*
+*Call of duty 4 dedicated server in a 7MB Docker image*
 
 [![Docker Cod4](https://github.com/qdm12/cod4-docker/raw/master/images/title.png)](https://hub.docker.com/r/qmcgaw/cod4/)
 
-Cod4x build
-
-[![Build Status](https://travis-ci.org/callofduty4x/CoD4x_Server.svg?branch=master)](https://travis-ci.org/callofduty4x/CoD4x_Server)
-
-Docker build
+**Warning**: Please replace `ARGS` with command line arguments. Some functionalities were removed (Steam) and running without root can cause problems.
 
 [![Build Status](https://travis-ci.org/qdm12/cod4-docker.svg?branch=master)](https://travis-ci.org/qdm12/cod4-docker)
 [![Docker Build Status](https://img.shields.io/docker/build/qmcgaw/cod4.svg)](https://hub.docker.com/r/qmcgaw/cod4)
@@ -26,13 +22,12 @@ Docker build
 
 | Image size | RAM usage | CPU usage |
 | --- | --- | --- |
-| 357MB | 300MB to 400MB | Low |
+| 6.57MB | 80MB to 150MB | Low |
 
 It is based on:
 
-- [Cod4x](https://cod4x.me/) Linux Server
-- [Debian stretch slim](https://hub.docker.com/_/debian/)
-- [g++-multilib](https://packages.debian.org/stretch/g++-multilib)
+- [Cod4x](https://github.com/callofduty4x/CoD4x_Server) server built from source
+- [Scratch](https://hub.docker.com/_/scratch/)
 
 ## Requirements
 
@@ -42,6 +37,7 @@ It is based on:
 
 ## Features
 
+- Less than **7MB** image !
 - [Cod4x server features](https://github.com/callofduty4x/CoD4x_Server#the-most-prominent-features-are)
 - Works with custom mods and maps (see the [Mods section](#Mods))
 - Easily configurable with [docker-compose](#using-docker-compose)
@@ -61,16 +57,26 @@ We assume your *call of duty 4 game* is installed at `/mycod4path`
     - Copy all the files from `/mycod4path/zone` to `./zone`
     - (Optional) Copy the mods you want to use from `/mycod4path/mods` to `./mods`
     - (Optional) Copy the maps you want to use from `/mycod4path/usermaps` to `./usermaps`
+1. As the container runs as user ID 1000 by default, fix the permissions:
+
+    ```bash
+    chown -R 1000 ./main ./mods ./usermaps ./zone
+    chmod -R 400 ./zone ./usermaps
+    chmod -R 700 ./main ./mods
+    ```
+
+    You can also run the container with `--user=$UID:$GID` or with `--user="root"` (unadvised!)
+
 1. Run the following command as super user:
 
     ```bash
     docker run -d --name=cod4 -p 28960:28960/udp \
         -v $(pwd)/main:/cod4/main -v $(pwd)/zone:/cod4/zone:ro \
         -v $(pwd)/mods:/cod4/mods -v $(pwd)/usermaps:/cod4/usermaps:ro \
-        -e 'ARGS=+map mp_shipment' qmcgaw/cod4
+        qmcgaw/cod4 +map mp_shipment
     ```
 
-    The environment variable ARGS is optional and defaults to `+set dedicated 2+set sv_cheats "1"+set sv_maxclients "64"+exec server.cfg+map_rotate`
+    The command line argument is optional and defaults to `+set dedicated 2+set sv_cheats "1"+set sv_maxclients "64"+exec server.cfg+map_rotate`
 
     You can also download and modify the [*docker-compose.yml*](https://raw.githubusercontent.com/qdm12/cod4-docker/master/docker-compose.yml) file and run
 
@@ -154,24 +160,11 @@ and must be in the `ARGS` environment variable:
 - `+set net_port 28961` don't use if not needed
 - `+map_rotate` OR i.e. `+map mp_shipment` **should be the last launch argument**
 
-## Bind mounts permission issues
+## TODOs
 
-As the container is running as non-root user with UID 1000, you can either:
-
-- Run the container with `--user=$UID:$GID`
-- Change `./main`, `./mods`, `./usermaps` and `./zone` ownership and permissions with for example:
-
-    ```bash
-    chown -R 1000 ./main ./mods ./usermaps ./zone
-    chmod 400 ./usermaps ./zone
-    chmod 600 ./main ./mods
-    ```
-
-## To do eventually
-
-- Run on Alpine or Scratch
-- Easily switch between mods: script file or management tool
+- Replace Apache with Nginx
 - Plugins (see https://hub.docker.com/r/callofduty4x/cod4x18-server/)
+- Easily switch between mods: script file or management tool
 - Built-in mods?
 
 ## Acknowledgements

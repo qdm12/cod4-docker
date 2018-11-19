@@ -8,11 +8,10 @@ services:
       - /yourpath/zone:/cod4/zone:ro
       - /yourpath/mods:/cod4/mods
       - /yourpath/usermaps:/cod4/usermaps:ro
-    environment:
-      - ARGS=+set dedicated 2+set sv_cheats 1+set sv_maxclients 64+set ui_maxclients 64+exec server.cfg+map_rotate
+    network_mode: bridge
     ports:
       - 28960:28960/udp
-    network_mode: bridge
+    command: +set dedicated 2+set sv_cheats 1+set sv_maxclients 64+set ui_maxclients 64+exec server.cfg+map_rotate
     restart: always
   # =>>> http server to server mods and usermaps
   #http:
