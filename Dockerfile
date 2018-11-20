@@ -1,4 +1,5 @@
 ARG DEBIAN_VERSION=stretch-slim
+ARG ALPINE_VERSION=3.8
 
 FROM debian:${DEBIAN_VERSION} as builder
 ARG COD4X_VERSION=v17.7.2
@@ -12,7 +13,7 @@ RUN wget https://github.com/callofduty4x/CoD4x_Server/archive/${COD4X_VERSION}.t
     sed -i 's/LINUX_LFLAGS=/LINUX_LFLAGS=-static /' makefile && \
     make
 
-FROM scratch
+FROM alpine:${ALPINE_VERSION}
 ARG BUILD_DATE
 ARG VCS_REF
 LABEL org.label-schema.schema-version="1.0.0-rc1" \
@@ -27,14 +28,23 @@ LABEL org.label-schema.schema-version="1.0.0-rc1" \
       org.label-schema.docker.cmd.devel="docker run -it --rm --name=cod4 -p 28960:28960/udp -v $(pwd)/main:/cod4/main -v $(pwd)/zone:/cod4/zone:ro qmcgaw/cod4 +map mp_shipment" \
       org.label-schema.docker.params="" \
       org.label-schema.version="1.8-17.7" \
-      image-size="6.56MB" \
+      image-size="19.8MB" \
       ram-usage="80MB to 150MB" \
       cpu-usage="Low"
 EXPOSE 28960/udp
 WORKDIR /cod4
-VOLUME /cod4/main /cod4/zone /cod4/mods /cod4/usermaps
-COPY --chown=1000 server.cfg ./
+VOLUME /cod4/main /cod4/zone /cod4/mods /cod4/usermaps /cod4/main_shared
 COPY --chown=1000 --from=builder /cod4/bin/cod4x18_dedrun .
+COPY --chown=1000 entrypoint.sh server.cfg vendor/xbase_00.iwd ./
+RUN cd /cod4/main_shared && \
+    wget -q https://github.com/callofduty4x/finalkillcam/archive/master.tar.gz && \
+    tar -zxf master.tar.gz --strip-components=1 && \
+    rm master.tar.gz && \
+    chown -R 1000 /cod4 && \
+    chmod 700 /cod4 && \
+    chmod -R 400 /cod4/* && \
+    chmod 500 /cod4/entrypoint.sh /cod4/cod4x18_dedrun && \
+    chmod -R 700 /cod4/main /cod4/mods
 USER 1000
-ENTRYPOINT [ "./cod4x18_dedrun" ]
+ENTRYPOINT [ "/cod4/entrypoint.sh" ]
 CMD +set dedicated 2+set sv_cheats "1"+set sv_maxclients "64"+exec server.cfg+map_rotate

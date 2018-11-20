@@ -22,12 +22,14 @@
 
 | Image size | RAM usage | CPU usage |
 | --- | --- | --- |
-| 6.57MB | 80MB to 150MB | Low |
+| 19.8MB | 80MB to 150MB | Low |
 
 It is based on:
 
+- [Alpine 3.8](x)
 - [Cod4x](https://github.com/callofduty4x/CoD4x_Server) server built from source
 - [Scratch](https://hub.docker.com/_/scratch/)
+- [Cod4x FinalKillcam plugin](https://github.com/callofduty4x/finalkillcam)
 
 ## Requirements
 
@@ -142,8 +144,7 @@ Assuming:
 - Your mod directory is `./mymod`
 - Your main mod configuration file is `./mymod/server.cfg`
 
-Set the environment variable as:
-`ARGS=+set dedicated 2+set sv_cheats "1"+set sv_maxclients "64"+set fs_game mods/mymod+exec server.cfg +map_rotate`
+Set the command line option to `+set dedicated 2+set sv_cheats "1"+set sv_maxclients "64"+set fs_game mods/mymod+exec server.cfg +map_rotate`
 
 ## Write protected args
 
@@ -162,6 +163,7 @@ and must be in the `ARGS` environment variable:
 
 ## TODOs
 
+- Fix permissions to create files etc.
 - Replace Apache with Nginx
 - Plugins (see https://hub.docker.com/r/callofduty4x/cod4x18-server/)
 - Easily switch between mods: script file or management tool
