@@ -20,6 +20,8 @@
 [![Image size](https://images.microbadger.com/badges/image/qmcgaw/cod4.svg)](https://microbadger.com/images/qmcgaw/cod4)
 [![Image version](https://images.microbadger.com/badges/version/qmcgaw/cod4.svg)](https://microbadger.com/images/qmcgaw/cod4)
 
+[![Donate PayPal](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://paypal.me/qdm12)
+
 | Image size | RAM usage | CPU usage |
 | --- | --- | --- |
 | 19.8MB | 80MB to 150MB | Low |
