@@ -1,5 +1,5 @@
 ARG DEBIAN_VERSION=stretch-slim
-ARG ALPINE_VERSION=3.8
+ARG ALPINE_VERSION=3.9
 
 FROM debian:${DEBIAN_VERSION} as builder
 ARG COD4X_VERSION=v17.7.2
@@ -32,19 +32,17 @@ LABEL org.label-schema.schema-version="1.0.0-rc1" \
       ram-usage="80MB to 150MB" \
       cpu-usage="Low"
 EXPOSE 28960/udp
-WORKDIR /cod4
-VOLUME /cod4/main /cod4/zone /cod4/mods /cod4/usermaps /cod4/main_shared
+WORKDIR /home/user/cod4
 COPY --chown=1000 --from=builder /cod4/bin/cod4x18_dedrun .
 COPY --chown=1000 entrypoint.sh server.cfg vendor/xbase_00.iwd ./
-RUN cd /cod4/main_shared && \
-    wget -q https://github.com/callofduty4x/finalkillcam/archive/master.tar.gz && \
-    tar -zxf master.tar.gz --strip-components=1 && \
-    rm master.tar.gz && \
-    chown -R 1000 /cod4 && \
-    chmod 700 /cod4 && \
-    chmod -R 400 /cod4/* && \
-    chmod 500 /cod4/entrypoint.sh /cod4/cod4x18_dedrun && \
-    chmod -R 700 /cod4/main /cod4/mods
-USER 1000
-ENTRYPOINT [ "/cod4/entrypoint.sh" ]
+RUN adduser -S user -h /home/user -u 1000 && \
+    chown -R user /home/user && \
+    chmod -R 700 /home/user && \
+    mkdir usermaps mods zone main && \
+    chown -R user /home/user/cod4 && \
+    chmod -R 700 /home/user/cod4 && \
+    chmod 500 entrypoint.sh cod4x18_dedrun && \
+    chmod -R 700 main mods
+ENTRYPOINT [ "/home/user/cod4/entrypoint.sh" ]
 CMD +set dedicated 2+set sv_cheats "1"+set sv_maxclients "64"+exec server.cfg+map_rotate
+USER user

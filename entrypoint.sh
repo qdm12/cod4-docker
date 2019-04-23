@@ -18,15 +18,16 @@ exitOnError(){
   fi
 }
 
-test -w "/cod4/main"
-exitOnError $? "/cod4/main is not writable, please fix its ownership and/or permissions"
-test -w "/cod4/mods"
-exitOnError $? "/cod4/mods is not writable, please fix its ownership and/or permissions"
-test -r "/cod4/usermaps"
-exitOnError $? "/cod4/usermaps is not readable, please fix its ownership and/or permissions"
-test -r "/cod4/zone"
-exitOnError $? "/cod4/zone is not readable, please fix its ownership and/or permissions"
+test -w "./main"
+exitOnError $? "./main is not writable, please fix its ownership and/or permissions"
+test -w "./mods"
+exitOnError $? "./mods is not writable, please fix its ownership and/or permissions"
+test -r "./usermaps"
+exitOnError $? "./usermaps is not readable, please fix its ownership and/or permissions"
+test -r "./zone"
+exitOnError $? "./zone is not readable, please fix its ownership and/or permissions"
 # TODO More checks
+# No sym links as they don't work on remote shares in example
 if [ ! -f main/xbase_00.iwd ]; then
   cp xbase_00.iwd main/xbase_00.iwd
 fi

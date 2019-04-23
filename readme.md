@@ -2,9 +2,9 @@
 
 *Call of duty 4 dedicated server in a 7MB Docker image*
 
-[![Docker Cod4](https://github.com/qdm12/cod4-docker/raw/master/images/title.png)](https://hub.docker.com/r/qmcgaw/cod4/)
+**Please note that the container paths changed to `/home/user/cod4` instead of `/cod4`**
 
-**Warning**: Please replace `ARGS` with command line arguments. Some functionalities were removed (Steam) and running without root can cause problems.
+[![Docker Cod4](https://github.com/qdm12/cod4-docker/raw/master/images/title.png)](https://hub.docker.com/r/qmcgaw/cod4/)
 
 [![Build Status](https://travis-ci.org/qdm12/cod4-docker.svg?branch=master)](https://travis-ci.org/qdm12/cod4-docker)
 [![Docker Build Status](https://img.shields.io/docker/build/qmcgaw/cod4.svg)](https://hub.docker.com/r/qmcgaw/cod4)
@@ -24,14 +24,12 @@
 
 | Image size | RAM usage | CPU usage |
 | --- | --- | --- |
-| 19.8MB | 80MB to 150MB | Low |
+| 20.9MB | 80MB to 150MB | Low |
 
 It is based on:
 
-- [Alpine 3.8](x)
+- [Alpine 3.9](https://alpinelinux.org)
 - [Cod4x](https://github.com/callofduty4x/CoD4x_Server) server built from source
-- [Scratch](https://hub.docker.com/_/scratch/)
-- [Cod4x FinalKillcam plugin](https://github.com/callofduty4x/finalkillcam)
 
 ## Requirements
 
@@ -41,11 +39,12 @@ It is based on:
 
 ## Features
 
-- Less than **7MB** image !
+- **21MB** image
 - [Cod4x server features](https://github.com/callofduty4x/CoD4x_Server#the-most-prominent-features-are)
 - Works with custom mods and maps (see the [Mods section](#Mods))
 - Easily configurable with [docker-compose](#using-docker-compose)
-- Run a lightweight Apache HTTP server for your clients to download your mods and usermaps
+- Runs without root (safer)
+- Run a lightweight Apache HTTP server for your clients to download your mods and usermaps with docker-compose.yml
 - Default cod4 configuration file [server.cfg](https://github.com/qdm12/cod4-docker/blob/master/server.cfg)
     - Placed into `./main`
     - Launched by default when not using mods with `exec server.cfg`
@@ -71,7 +70,7 @@ We assume your *call of duty 4 game* is installed at `/mycod4path`
 
     You can also run the container with `--user=$UID:$GID` or with `--user="root"` (unadvised!)
 
-1. Run the following command as super user:
+1. Run the following command as root user:
 
     ```bash
     docker run -d --name=cod4 -p 28960:28960/udp \
@@ -165,7 +164,8 @@ and must be in the `ARGS` environment variable:
 
 ## TODOs
 
-- Fix permissions to create files etc.
+- Check logs can be written
+- Env variables for plugins etc.
 - Replace Apache with Nginx
 - Plugins (see https://hub.docker.com/r/callofduty4x/cod4x18-server/)
 - Easily switch between mods: script file or management tool
