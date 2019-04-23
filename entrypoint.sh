@@ -19,13 +19,37 @@ exitOnError(){
 }
 
 test -w "./main"
-exitOnError $? "./main is not writable, please fix its ownership and/or permissions"
+if [ $? != 0 ]; then
+  test -w "/cod4/main"
+  if [ $? != 0 ]; then
+    exitOnError $? "main is not writable, please fix its ownership and/or permissions"
+  fi
+  ln -s /cod4/main ./main
+fi
 test -w "./mods"
-exitOnError $? "./mods is not writable, please fix its ownership and/or permissions"
+if [ $? != 0 ]; then
+  test -w "/cod4/mods"
+  if [ $? != 0 ]; then
+    exitOnError $? "mods is not writable, please fix its ownership and/or permissions"
+  fi
+  ln -s /cod4/mods ./mods
+fi
 test -r "./usermaps"
-exitOnError $? "./usermaps is not readable, please fix its ownership and/or permissions"
+if [ $? != 0 ]; then
+  test -r "/cod4/usermaps"
+  if [ $? != 0 ]; then
+    exitOnError $? "usermaps is not readable, please fix its ownership and/or permissions"
+  fi
+  ln -s /cod4/usermaps ./usermaps
+fi
 test -r "./zone"
-exitOnError $? "./zone is not readable, please fix its ownership and/or permissions"
+if [ $? != 0 ]; then
+  test -r "/cod4/zone"
+  if [ $? != 0 ]; then
+    exitOnError $? "zone is not readable, please fix its ownership and/or permissions"
+  fi
+  ln -s /cod4/zone ./zone
+fi
 # TODO More checks
 # No sym links as they don't work on remote shares in example
 if [ ! -f main/xbase_00.iwd ]; then

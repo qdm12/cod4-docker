@@ -2,8 +2,6 @@
 
 *Call of duty 4 dedicated server in a 7MB Docker image*
 
-**Please note that the container paths changed to `/home/user/cod4` instead of `/cod4`**
-
 [![Docker Cod4](https://github.com/qdm12/cod4-docker/raw/master/images/title.png)](https://hub.docker.com/r/qmcgaw/cod4/)
 
 [![Build Status](https://travis-ci.org/qdm12/cod4-docker.svg?branch=master)](https://travis-ci.org/qdm12/cod4-docker)
@@ -63,9 +61,9 @@ We assume your *call of duty 4 game* is installed at `/mycod4path`
 1. As the container runs as user ID 1000 by default, fix the permissions:
 
     ```bash
-    chown -R 1000 ./main ./mods ./usermaps ./zone
-    chmod -R 400 ./zone ./usermaps
-    chmod -R 700 ./main ./mods
+    chown -R 1000 main mods usermaps zone
+    chmod -R 400 zone usermaps
+    chmod -R 700 main mods
     ```
 
     You can also run the container with `--user=$UID:$GID` or with `--user="root"` (unadvised!)
@@ -74,8 +72,10 @@ We assume your *call of duty 4 game* is installed at `/mycod4path`
 
     ```bash
     docker run -d --name=cod4 -p 28960:28960/udp \
-        -v $(pwd)/main:/cod4/main -v $(pwd)/zone:/cod4/zone:ro \
-        -v $(pwd)/mods:/cod4/mods -v $(pwd)/usermaps:/cod4/usermaps:ro \
+        -v $(pwd)/main:/home/user/cod4/main \
+        -v $(pwd)/zone:/home/user/cod4/zone:ro \
+        -v $(pwd)/mods:/home/user/cod4/mods \
+        -v $(pwd)/usermaps:/home/user/cod4/usermaps:ro \
         qmcgaw/cod4 +map mp_shipment
     ```
 
