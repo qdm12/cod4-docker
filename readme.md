@@ -1,6 +1,6 @@
 # COD4 Docker dedicated server
 
-*Call of duty 4 dedicated server in a 7MB Docker image*
+*Call of duty 4 dedicated server in a 21MB Docker image*
 
 [![Docker Cod4](https://github.com/qdm12/cod4-docker/raw/master/images/title.png)](https://hub.docker.com/r/qmcgaw/cod4/)
 

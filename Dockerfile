@@ -38,11 +38,9 @@ COPY --chown=1000 entrypoint.sh server.cfg vendor/xbase_00.iwd ./
 RUN adduser -S user -h /home/user -u 1000 && \
     chown -R user /home/user && \
     chmod -R 700 /home/user && \
-    mkdir usermaps mods zone main && \
     chown -R user /home/user/cod4 && \
     chmod -R 700 /home/user/cod4 && \
-    chmod 500 entrypoint.sh cod4x18_dedrun && \
-    chmod -R 700 main mods
+    chmod 500 entrypoint.sh cod4x18_dedrun
 ENTRYPOINT [ "/home/user/cod4/entrypoint.sh" ]
 CMD +set dedicated 2+set sv_cheats "1"+set sv_maxclients "64"+exec server.cfg+map_rotate
 USER user
