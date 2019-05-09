@@ -57,7 +57,7 @@ We assume your *call of duty 4 game* is installed at `/mycod4path`
     - Copy all the files from `/mycod4path/zone` to `./zone`
     - (Optional) Copy the mods you want to use from `/mycod4path/mods` to `./mods`
     - (Optional) Copy the maps you want to use from `/mycod4path/usermaps` to `./usermaps`
-1. As the container runs as user ID 1000 by default, fix the permissions:
+1. As the container runs as user ID 1000 by default, fix the ownership and permissions:
 
     ```bash
     chown -R 1000 main mods usermaps zone
@@ -65,9 +65,9 @@ We assume your *call of duty 4 game* is installed at `/mycod4path`
     chmod -R 700 main mods
     ```
 
-    You can also run the container with `--user=$UID:$GID` or with `--user="root"` (unadvised!)
+    You can also run the container with `--user="root"` (unadvised!)
 
-1. Run the following command as root user:
+1. Run the following command as root user on your host:
 
     ```bash
     docker run -d --name=cod4 -p 28960:28960/udp \
