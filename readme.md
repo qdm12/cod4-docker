@@ -51,7 +51,7 @@ It is based on:
 
 We assume your *call of duty 4 game* is installed at `/mycod4path`
 
-1. On your host, create the directories `./main`, `./zone`, `./mods`, `./usermaps` and `./logs`.
+1. On your host, create the directories `./main`, `./zone`, `./mods` and `./usermaps`.
 1. From your Call of Duty 4 installation directory:
     - Copy all the `.iwd` files from `/mycod4path/main` to `./main`
     - Copy all the files from `/mycod4path/zone` to `./zone`
@@ -60,9 +60,9 @@ We assume your *call of duty 4 game* is installed at `/mycod4path`
 1. As the container runs as user ID 1000 by default, fix the ownership and permissions:
 
     ```bash
-    chown -R 1000 main mods usermaps zone logs
+    chown -R 1000 main mods usermaps zone
     chmod -R 400 zone usermaps
-    chmod -R 700 main mods logs
+    chmod -R 700 main mods
     ```
 
     You can also run the container with `--user="root"` (unadvised!)
@@ -72,14 +72,13 @@ We assume your *call of duty 4 game* is installed at `/mycod4path`
     ```bash
     docker run -d --name=cod4 -p 28960:28960/udp \
         -v $(pwd)/main:/home/user/cod4/main \
-        -v $(pwd)/logs:/home/user/.callofduty4 \
         -v $(pwd)/zone:/home/user/cod4/zone:ro \
         -v $(pwd)/mods:/home/user/cod4/mods \
         -v $(pwd)/usermaps:/home/user/cod4/usermaps:ro \
         qmcgaw/cod4 +map mp_shipment
     ```
 
-    The command line argument is optional and defaults to `+set dedicated 2+set sv_cheats "1"+set sv_maxclients "64"+exec server.cfg+map_rotate`
+    The command line argument `+map mp_shipment` is optional and defaults to `+set dedicated 2+set sv_cheats "1"+set sv_maxclients "64"+exec server.cfg+map_rotate`
 
     You can also download and modify the [*docker-compose.yml*](https://raw.githubusercontent.com/qdm12/cod4-docker/master/docker-compose.yml) file and run
 
