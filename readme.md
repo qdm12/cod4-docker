@@ -4,7 +4,6 @@
 
 [![Docker Cod4](https://github.com/qdm12/cod4-docker/raw/master/images/title.png)](https://hub.docker.com/r/qmcgaw/cod4/)
 
-[![Build Status](https://travis-ci.org/qdm12/cod4-docker.svg?branch=master)](https://travis-ci.org/qdm12/cod4-docker)
 [![Docker Build Status](https://img.shields.io/docker/build/qmcgaw/cod4.svg)](https://hub.docker.com/r/qmcgaw/cod4)
 
 [![GitHub last commit](https://img.shields.io/github/last-commit/qdm12/cod4-docker.svg)](https://github.com/qdm12/cod4-docker/issues)
