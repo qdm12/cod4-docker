@@ -8,6 +8,7 @@ services:
       - /yourpath/zone:/home/user/cod4/zone:ro
       - /yourpath/mods:/home/user/cod4/mods
       - /yourpath/usermaps:/home/user/cod4/usermaps:ro
+      - /yourpath/logs:/home/user/.callofduty4
     network_mode: bridge
     ports:
       - 28960:28960/udp

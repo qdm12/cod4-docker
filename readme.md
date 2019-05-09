@@ -51,7 +51,7 @@ It is based on:
 
 We assume your *call of duty 4 game* is installed at `/mycod4path`
 
-1. On your host, create the directories `./main`, `./zone`, `./mods` and `./usermaps`
+1. On your host, create the directories `./main`, `./zone`, `./mods`, `./usermaps` and `./logs`.
 1. From your Call of Duty 4 installation directory:
     - Copy all the `.iwd` files from `/mycod4path/main` to `./main`
     - Copy all the files from `/mycod4path/zone` to `./zone`
@@ -60,9 +60,9 @@ We assume your *call of duty 4 game* is installed at `/mycod4path`
 1. As the container runs as user ID 1000 by default, fix the ownership and permissions:
 
     ```bash
-    chown -R 1000 main mods usermaps zone
+    chown -R 1000 main mods usermaps zone logs
     chmod -R 400 zone usermaps
-    chmod -R 700 main mods
+    chmod -R 700 main mods logs
     ```
 
     You can also run the container with `--user="root"` (unadvised!)
@@ -72,6 +72,7 @@ We assume your *call of duty 4 game* is installed at `/mycod4path`
     ```bash
     docker run -d --name=cod4 -p 28960:28960/udp \
         -v $(pwd)/main:/home/user/cod4/main \
+        -v $(pwd)/logs:/home/user/.callofduty4 \
         -v $(pwd)/zone:/home/user/cod4/zone:ro \
         -v $(pwd)/mods:/home/user/cod4/mods \
         -v $(pwd)/usermaps:/home/user/cod4/usermaps:ro \
@@ -163,7 +164,6 @@ and must be in the `ARGS` environment variable:
 
 ## TODOs
 
-- Check logs can be written
 - Env variables for plugins etc.
 - Replace Apache with Nginx
 - Plugins (see https://hub.docker.com/r/callofduty4x/cod4x18-server/)
