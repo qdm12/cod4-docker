@@ -1,13 +1,13 @@
 ARG DEBIAN_VERSION=stretch-slim
-ARG ALPINE_VERSION=3.9
+ARG ALPINE_VERSION=3.10
 
 FROM debian:${DEBIAN_VERSION} AS builder
 ARG COD4X_VERSION=v17.7.2
 RUN dpkg --add-architecture i386 && \
-    apt-get update && \
-    apt-get install -y nasm:i386 build-essential gcc-multilib g++-multilib unzip paxctl wget
+    apt-get -qq update &> /dev/null && \
+    apt-get -qq install -y nasm:i386 build-essential gcc-multilib g++-multilib unzip paxctl wget git &> /dev/null
 WORKDIR /cod4
-RUN wget https://github.com/callofduty4x/CoD4x_Server/archive/${COD4X_VERSION}.tar.gz && \
+RUN wget -q https://github.com/callofduty4x/CoD4x_Server/archive/${COD4X_VERSION}.tar.gz && \
     tar -xzf ${COD4X_VERSION}.tar.gz --strip-components=1 && \
     rm ${COD4X_VERSION}.tar.gz && \
     sed -i 's/LINUX_LFLAGS=/LINUX_LFLAGS=-static /' makefile && \
