@@ -26,7 +26,7 @@ It's about 20MB based on:
 ## Requirements
 
 - COD4 Client game
-- COD4 running on version 1.7 have to [update to 1.8](#update-your-game)
+- COD4 running on version 1.7 have to [update to 17.9](#update-your-game)
 - Original COD4 **main** and **zone** files required (from the client installation directory)
 
 ## Features
@@ -111,12 +111,10 @@ We assume your *call of duty 4 game* is installed at `/mycod4path`
 ## Update your game
 
 1. Make sure you updated your game to version 1.7 first (see [this](https://cod4x.me/index.php?/forums/topic/12-how-to-install-cod4x/))
-1. Download the [COD4x client ZIP file](https://cod4x.me/downloads/cod4x_client.zip)
-1. Using Winrar / 7Zip / Winzip, extract the **cod4x_client.zip** to your COD4 game directory
-1. Double click on **install.cmd** that you just extracted
-1. When launching the multiplayer game, you should see at the bottom right:
-
-![Bottom right screen cod4x](https://github.com/qdm12/cod4-docker/blob/master/images/cod4x-update.png?raw=true)
+1. Download the [COD4x client ZIP file](https://cod4x.me/downloads/cod4x_client_17_9.zip)
+1. Using Winrar / 7Zip / Winzip, extract **cod4x_client_17_9.zip** to your COD4 game directory
+1. Go in the extracted directory *cod4x_18_v17_9_client* and double click on **install.cmd**
+1. When launching the multiplayer game, you should see at the bottom right `17.9`
 
 ## Testing
 
@@ -154,6 +152,14 @@ and must be in the `ARGS` environment variable:
 - `+set net_ip 127.0.0.1` don't use if not needed
 - `+set net_port 28961` don't use if not needed
 - `+map_rotate` OR i.e. `+map mp_shipment` **should be the last launch argument**
+
+## Docker tags
+
+➡️ [List of all tags](https://hub.docker.com/r/qmcgaw/cod4/tags)
+
+- `:v17.7.2` based on the latest available Github release for cod4xserver
+- `:abf4704` based on [this commit](https://github.com/callofduty4x/CoD4x_Server/commit/abf470469e8ff24d65cc5d28ab804b8621d43c9e) corresponding to version `:v17.8`
+- Feel free to open an issue for another Docker tag if you need one.
 
 ## TODOs
 

@@ -2,7 +2,7 @@ ARG DEBIAN_VERSION=buster-slim
 ARG ALPINE_VERSION=3.11
 
 FROM debian:${DEBIAN_VERSION} AS builder
-ARG COD4X_VERSION=v17.7.2
+ARG COD4X_VERSION=abf470469e8ff24d65cc5d28ab804b8621d43c9e
 RUN dpkg --add-architecture i386 && \
     apt-get -qq update && \
     apt-get -qq install -y nasm:i386 build-essential gcc-multilib g++-multilib unzip paxctl wget git
