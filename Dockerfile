@@ -16,21 +16,16 @@ RUN wget -q https://github.com/callofduty4x/CoD4x_Server/archive/${COD4X_VERSION
 FROM alpine:${ALPINE_VERSION}
 ARG BUILD_DATE
 ARG VCS_REF
-LABEL org.label-schema.schema-version="1.0.0-rc1" \
-    maintainer="quentin.mcgaw@gmail.com" \
-    org.label-schema.build-date=$BUILD_DATE \
-    org.label-schema.vcs-ref=$VCS_REF \
-    org.label-schema.vcs-url="https://github.com/qdm12/cod4-docker" \
-    org.label-schema.url="https://github.com/qdm12/cod4-docker" \
-    org.label-schema.vcs-description="Call of duty 4X Modern Warfare dedicated server" \
-    org.label-schema.vcs-usage="https://github.com/qdm12/cod4-docker/blob/master/README.md#setup" \
-    org.label-schema.docker.cmd="see readme of Github page" \
-    org.label-schema.docker.cmd.devel="see readme of Github page" \
-    org.label-schema.docker.params="" \
-    org.label-schema.version="1.8-17.7.2" \
-    image-size="20.9MB" \
-    ram-usage="80MB to 150MB" \
-    cpu-usage="Low"
+LABEL \
+    org.opencontainers.image.authors="quentin.mcgaw@gmail.com" \
+    org.opencontainers.image.created=$BUILD_DATE \
+    org.opencontainers.image.version=$VERSION \
+    org.opencontainers.image.revision=$VCS_REF \
+    org.opencontainers.image.url="https://github.com/qdm12/cod4-docker" \
+    org.opencontainers.image.documentation="https://github.com/qdm12/cod4-docker/blob/master/README.md" \
+    org.opencontainers.image.source="https://github.com/qdm12/cod4-docker" \
+    org.opencontainers.image.title="cod4" \
+    org.opencontainers.image.description="Call of duty 4X Modern Warfare dedicated server"
 EXPOSE 28960/udp
 WORKDIR /home/user/cod4
 COPY --chown=1000 --from=builder /cod4/bin/cod4x18_dedrun .
