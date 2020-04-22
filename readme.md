@@ -4,28 +4,23 @@
 
 [![Docker Cod4](https://github.com/qdm12/cod4-docker/raw/master/images/title.png)](https://hub.docker.com/r/qmcgaw/cod4/)
 
-[![Docker Build Status](https://img.shields.io/docker/build/qmcgaw/cod4.svg)](https://hub.docker.com/r/qmcgaw/cod4)
+[![Build status](https://github.com/qdm12/cod4-docker/workflows/Buildx%20latest/badge.svg)](https://github.com/qdm12/cod4-docker/actions?query=workflow%3A%22Buildx+latest%22)
+[![Docker Pulls](https://img.shields.io/docker/pulls/qmcgaw/cod4.svg)](https://hub.docker.com/r/qmcgaw/cod4)
+[![Docker Stars](https://img.shields.io/docker/stars/qmcgaw/cod4.svg)](https://hub.docker.com/r/qmcgaw/cod4)
 
 [![GitHub last commit](https://img.shields.io/github/last-commit/qdm12/cod4-docker.svg)](https://github.com/qdm12/cod4-docker/issues)
 [![GitHub commit activity](https://img.shields.io/github/commit-activity/y/qdm12/cod4-docker.svg)](https://github.com/qdm12/cod4-docker/issues)
 [![GitHub issues](https://img.shields.io/github/issues/qdm12/cod4-docker.svg)](https://github.com/qdm12/cod4-docker/issues)
 
-[![Docker Pulls](https://img.shields.io/docker/pulls/qmcgaw/cod4.svg)](https://hub.docker.com/r/qmcgaw/cod4)
-[![Docker Stars](https://img.shields.io/docker/stars/qmcgaw/cod4.svg)](https://hub.docker.com/r/qmcgaw/cod4)
-[![Docker Automated](https://img.shields.io/docker/automated/qmcgaw/cod4.svg)](https://hub.docker.com/r/qmcgaw/cod4)
-
 [![Image size](https://images.microbadger.com/badges/image/qmcgaw/cod4.svg)](https://microbadger.com/images/qmcgaw/cod4)
 [![Image version](https://images.microbadger.com/badges/version/qmcgaw/cod4.svg)](https://microbadger.com/images/qmcgaw/cod4)
+[![Join Slack channel](https://img.shields.io/badge/slack-@qdm12-yellow.svg?logo=slack)](https://join.slack.com/t/qdm12/shared_invite/enQtOTE0NjcxNTM1ODc5LTYyZmVlOTM3MGI4ZWU0YmJkMjUxNmQ4ODQ2OTAwYzMxMTlhY2Q1MWQyOWUyNjc2ODliNjFjMDUxNWNmNzk5MDk)
 
-[![Donate PayPal](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://paypal.me/qdm12)
+[![Donate PayPal](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://paypal.me/qmcgaw)
 
-| Image size | RAM usage | CPU usage |
-| --- | --- | --- |
-| 20.9MB | 80MB to 150MB | Low |
+It's about 20MB based on:
 
-It is based on:
-
-- [Alpine 3.9](https://alpinelinux.org)
+- [Alpine 3.11](https://alpinelinux.org)
 - [Cod4x](https://github.com/callofduty4x/CoD4x_Server) server built from source
 
 ## Requirements
@@ -36,7 +31,7 @@ It is based on:
 
 ## Features
 
-- **21MB** image
+- **20MB** image
 - [Cod4x server features](https://github.com/callofduty4x/CoD4x_Server#the-most-prominent-features-are)
 - Works with custom mods and maps (see the [Mods section](#Mods))
 - Easily configurable with [docker-compose](#using-docker-compose)
@@ -61,8 +56,7 @@ We assume your *call of duty 4 game* is installed at `/mycod4path`
 
     ```bash
     chown -R 1000 main mods usermaps zone
-    chmod -R 400 zone usermaps
-    chmod -R 700 main mods
+    chmod -R 700 main mods usermaps zone
     ```
 
     You can also run the container with `--user="root"` (unadvised!)
@@ -71,10 +65,10 @@ We assume your *call of duty 4 game* is installed at `/mycod4path`
 
     ```bash
     docker run -d --name=cod4 -p 28960:28960/udp \
-        -v $(pwd)/main:/home/user/cod4/main \
-        -v $(pwd)/zone:/home/user/cod4/zone:ro \
-        -v $(pwd)/mods:/home/user/cod4/mods \
-        -v $(pwd)/usermaps:/home/user/cod4/usermaps:ro \
+        -v /mycod4path/main:/home/user/cod4/main \
+        -v /mycod4path/zone:/home/user/cod4/zone:ro \
+        -v /mycod4path/mods:/home/user/cod4/mods \
+        -v /mycod4path/usermaps:/home/user/cod4/usermaps:ro \
         qmcgaw/cod4 +map mp_shipment
     ```
 
@@ -148,7 +142,7 @@ Set the command line option to `+set dedicated 2+set sv_cheats "1"+set sv_maxcli
 
 ## Write protected args
 
-The following parameters are write protected and **can't be placed in the server configuration file**, 
+The following parameters are write protected and **can't be placed in the server configuration file**,
 and must be in the `ARGS` environment variable:
 
 - `+set dedicated 2` - 2: open to internet, 1: LAN, 0: localhost
@@ -163,10 +157,16 @@ and must be in the `ARGS` environment variable:
 
 ## TODOs
 
-- Env variables for plugins etc.
-- Replace Apache with Nginx
-- Plugins (see https://hub.docker.com/r/callofduty4x/cod4x18-server/)
-- Easily switch between mods: script file or management tool
+- Steam docker tag
+- Go static binary program
+    - entrypoint
+    - HTTP static server for mods and usermaps
+    - Reload ability of cod4x
+    - UDP proxy for Windows
+    - Add extra ping with udp proxy
+- More env variables
+    - Plugins
+- [Plugins](https://hub.docker.com/r/callofduty4x/cod4x18-server/)
 - Built-in mods?
 
 ## Acknowledgements
