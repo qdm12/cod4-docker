@@ -45,9 +45,8 @@ COPY --chown=1000 entrypoint.sh server.cfg ./
 RUN adduser -S user -h /home/user -u 1000 && \
     chown -R user /home/user && \
     chmod -R 700 /home/user && \
-    chown -R user /home/user/cod4 && \
-    chmod -R 700 /home/user/cod4 && \
-    chmod 500 entrypoint.sh cod4x18_dedrun
+    chmod 500 entrypoint.sh cod4x18_dedrun && \
+    chmod 600 xbase_00.iwd
 ENTRYPOINT [ "/home/user/cod4/entrypoint.sh" ]
 CMD +set dedicated 2+set sv_cheats "1"+set sv_maxclients "64"+exec server.cfg+map_rotate
 USER user
