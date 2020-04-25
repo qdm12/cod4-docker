@@ -13,6 +13,16 @@ RUN wget -q https://github.com/callofduty4x/CoD4x_Server/archive/${COD4X_VERSION
     sed -i 's/LINUX_LFLAGS=/LINUX_LFLAGS=-static /' makefile && \
     make
 
+FROM alpine:${ALPINE_VERSION} AS downloader
+WORKDIR /tmp
+RUN apk add --update --no-cache -q --progress unzip && \
+    wget -q https://cod4x.me/downloads/cod4x_server-linux.zip && \
+    unzip -q cod4x_server-linux.zip -d cod4x && \
+    rm cod4x_server-linux.zip && \
+    apk del unzip && \
+    mv cod4x/main/xbase_00.iwd ./ && \
+    rm -r cod4x
+
 FROM alpine:${ALPINE_VERSION}
 ARG BUILD_DATE
 ARG VCS_REF
@@ -28,8 +38,10 @@ LABEL \
     org.opencontainers.image.description="Call of duty 4X Modern Warfare dedicated server"
 EXPOSE 28960/udp
 WORKDIR /home/user/cod4
+COPY --chown=1000 --from=downloader /tmp/xbase_00.iwd ./
 COPY --chown=1000 --from=builder /cod4/bin/cod4x18_dedrun .
-COPY --chown=1000 entrypoint.sh server.cfg vendor/xbase_00.iwd ./
+COPY --chown=1000 entrypoint.sh server.cfg ./
+
 RUN adduser -S user -h /home/user -u 1000 && \
     chown -R user /home/user && \
     chmod -R 700 /home/user && \
