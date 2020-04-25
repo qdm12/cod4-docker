@@ -1,6 +1,8 @@
-.gitignore
-.travis.yml
-.git/
-docker-compose.yml
-readme.md
+.git
+.github
+.vscode
 images
+.gitignore
+docker-compose.yml
+LICENSE
+README.md
