@@ -18,11 +18,6 @@
 
 [![Donate PayPal](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://paypal.me/qmcgaw)
 
-It's about 20MB based on:
-
-- [Alpine 3.11](https://alpinelinux.org)
-- [Cod4x](https://github.com/callofduty4x/CoD4x_Server) server built from source
-
 ## Requirements
 
 - COD4 Client game
@@ -31,7 +26,6 @@ It's about 20MB based on:
 
 ## Features
 
-- **20MB** image
 - [Cod4x server features](https://github.com/callofduty4x/CoD4x_Server#the-most-prominent-features-are)
 - Works with custom mods and maps (see the [Mods section](#Mods))
 - Easily configurable with [docker-compose](#using-docker-compose)
@@ -41,6 +35,14 @@ It's about 20MB based on:
     - Placed into `./main`
     - Launched by default when not using mods with `exec server.cfg`
     - Easily changeable
+- `qmcgaw/cod4` or `qmcgaw/cod4:alpine`:
+    - Only **21MB** and based on Alpine 3.11
+    - Does not work with the cod4x masterlist, see [this](https://github.com/qdm12/cod4-docker/issues/8)
+    - [Cod4x](https://github.com/callofduty4x/CoD4x_Server) server built from source
+- `qmcgaw/cod4:steam`:
+    - 385MB and based on Debian Buster Slim
+    - Works with the cod4x masterlist
+    - [Cod4x](https://github.com/callofduty4x/CoD4x_Server) server downloaded from [cod4x.me](https://cod4x.me)
 
 ## Setup
 
