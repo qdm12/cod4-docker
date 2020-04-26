@@ -39,6 +39,17 @@ RUN apk add --update --no-cache -q --progress unzip && \
     mv cod4x/main/xbase_00.iwd ./ && \
     rm -r cod4x
 
+FROM alpine:${ALPINE_VERSION} AS files
+WORKDIR /tmp
+RUN touch steam_api.so steamclient.so
+COPY --from=downloader /tmp/xbase_00.iwd .
+COPY --from=builder /cod4/bin/cod4x18_dedrun .
+COPY server.cfg .
+COPY --from=entrypoint /tmp/gobuild/entrypoint .
+RUN chown 1000 * && \
+    chmod 500 entrypoint cod4x18_dedrun steam_api.so steamclient.so && \
+    chmod 400 xbase_00.iwd server.cfg
+
 FROM alpine:${ALPINE_VERSION}
 ARG BUILD_DATE
 ARG VCS_REF
@@ -52,18 +63,13 @@ LABEL \
     org.opencontainers.image.source="https://github.com/qdm12/cod4-docker" \
     org.opencontainers.image.title="cod4" \
     org.opencontainers.image.description="Call of duty 4X Modern Warfare dedicated server"
-EXPOSE 28960/udp
-WORKDIR /home/user/cod4
-COPY --chown=1000 --from=downloader /tmp/xbase_00.iwd ./
-COPY --chown=1000 --from=builder /cod4/bin/cod4x18_dedrun .
-COPY --chown=1000 server.cfg ./
-COPY --chown=1000 --from=entrypoint /tmp/gobuild/entrypoint ./
-RUN adduser -S user -h /home/user -u 1000 && \
-    touch steam_api.so steamclient.so && \
+RUN mkdir -p /home/user && \
+    adduser -S user -h /home/user -u 1000 && \
     chown -R user /home/user && \
-    chmod -R 700 /home/user && \
-    chmod 500 entrypoint cod4x18_dedrun steam_api.so steamclient.so && \
-    chmod 400 xbase_00.iwd server.cfg
+    chmod -R 700 /home/user
+WORKDIR /home/user/cod4
 ENTRYPOINT [ "/home/user/cod4/entrypoint" ]
 CMD +set dedicated 2+set sv_cheats "1"+set sv_maxclients "64"+exec server.cfg+map_rotate
+EXPOSE 28960/udp
+COPY --from=files /tmp/ ./
 USER user
