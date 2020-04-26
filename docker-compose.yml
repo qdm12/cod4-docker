@@ -16,6 +16,8 @@ services:
     ports:
       # COD4x server
       - 28960:28960/udp
+      # Master list
+      - 28960:28960/tcp
       # Serving mods and usermaps over http
       - 8000:8000/tcp
     command: +set dedicated 2+set sv_cheats 1+set sv_maxclients 64+set ui_maxclients 64+exec server.cfg+map_rotate

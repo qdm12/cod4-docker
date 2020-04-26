@@ -62,7 +62,7 @@ We assume your *call of duty 4 game* is installed at `/mycod4path`
 1. Run the following command as root user on your host:
 
     ```bash
-    docker run -d --name=cod4 -p 28960:28960/udp -p 8000:8000/tcp \
+    docker run -d --name=cod4 -p 28960:28960/tcp -p 28960:28960/udp -p 8000:8000/tcp \
         -v /mycod4path/main:/home/user/cod4/main \
         -v /mycod4path/zone:/home/user/cod4/zone:ro \
         -v /mycod4path/mods:/home/user/cod4/mods \

@@ -70,7 +70,7 @@ RUN mkdir -p /home/user && \
 WORKDIR /home/user/cod4
 ENTRYPOINT [ "/home/user/cod4/entrypoint" ]
 CMD +set dedicated 2+set sv_cheats "1"+set sv_maxclients "64"+exec server.cfg+map_rotate
-EXPOSE 28960/udp 8000/tcp
+EXPOSE 28960/udp 28960/tcp 8000/tcp
 ENV \
     HTTP_SERVER=on \
     ROOT_URL=/
