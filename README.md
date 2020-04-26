@@ -165,13 +165,12 @@ and must be in the `ARGS` environment variable:
 
 ## TODOs
 
-- Steam docker tag
-- Go static binary program
-    - entrypoint
-    - HTTP static server for mods and usermaps
-    - Reload ability of cod4x
-    - UDP proxy for Windows
-    - Add extra ping with udp proxy
+- HTTP static server for mods and usermaps
+- UDP proxy for Windows
+- Docker Healthcheck
+- HTTP healthcheck endpoint (i.e. for K8s)
+- Reload ability of cod4x
+- Add extra ping with udp proxy
 - More env variables
     - Plugins
 - [Plugins](https://hub.docker.com/r/callofduty4x/cod4x18-server/)

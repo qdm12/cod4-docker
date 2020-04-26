@@ -1,5 +1,21 @@
 ARG DEBIAN_VERSION=buster-slim
 ARG ALPINE_VERSION=3.11
+ARG GO_VERSION=1.14
+
+FROM golang:${GO_VERSION}-alpine${ALPINE_VERSION} AS entrypoint
+RUN apk --update add git
+ENV CGO_ENABLED=0
+ARG GOLANGCI_LINT_VERSION=v1.25.0
+RUN wget -O- -nv https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s ${GOLANGCI_LINT_VERSION}
+WORKDIR /tmp/gobuild
+COPY .golangci.yml .
+COPY go.mod go.sum ./
+RUN go mod download 2>&1
+COPY cmd/main.go .
+COPY internal/ ./internal/
+RUN go test ./...
+RUN golangci-lint run --timeout=10m
+RUN go build -ldflags="-s -w" -o entrypoint main.go
 
 FROM debian:${DEBIAN_VERSION} AS builder
 ARG COD4X_VERSION=abf470469e8ff24d65cc5d28ab804b8621d43c9e
@@ -40,13 +56,14 @@ EXPOSE 28960/udp
 WORKDIR /home/user/cod4
 COPY --chown=1000 --from=downloader /tmp/xbase_00.iwd ./
 COPY --chown=1000 --from=builder /cod4/bin/cod4x18_dedrun .
-COPY --chown=1000 entrypoint.sh server.cfg ./
-
+COPY --chown=1000 server.cfg ./
+COPY --chown=1000 --from=entrypoint /tmp/gobuild/entrypoint ./
 RUN adduser -S user -h /home/user -u 1000 && \
+    touch steam_api.so steamclient.so && \
     chown -R user /home/user && \
     chmod -R 700 /home/user && \
-    chmod 500 entrypoint.sh cod4x18_dedrun && \
-    chmod 600 xbase_00.iwd
-ENTRYPOINT [ "/home/user/cod4/entrypoint.sh" ]
+    chmod 500 entrypoint cod4x18_dedrun steam_api.so steamclient.so && \
+    chmod 400 xbase_00.iwd server.cfg
+ENTRYPOINT [ "/home/user/cod4/entrypoint" ]
 CMD +set dedicated 2+set sv_cheats "1"+set sv_maxclients "64"+exec server.cfg+map_rotate
 USER user
