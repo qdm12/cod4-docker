@@ -63,11 +63,12 @@ LABEL \
     org.opencontainers.image.source="https://github.com/qdm12/cod4-docker" \
     org.opencontainers.image.title="cod4" \
     org.opencontainers.image.description="Call of duty 4X Modern Warfare dedicated server"
-RUN mkdir -p /home/user && \
+RUN mkdir -p /home/user/.callofduty4/main && \
     adduser -S user -h /home/user -u 1000 && \
     chown -R user /home/user && \
     chmod -R 700 /home/user
 WORKDIR /home/user/cod4
+RUN chown 1000 /home/user/cod4
 ENTRYPOINT [ "/home/user/cod4/entrypoint" ]
 CMD +set dedicated 2+set sv_cheats "1"+set sv_maxclients "64"+exec server.cfg+map_rotate
 EXPOSE 28960/udp 28960/tcp 8000/tcp

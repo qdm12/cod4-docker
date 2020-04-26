@@ -53,7 +53,7 @@ RUN apt-get update -qq > /dev/null && \
     apt-get install --no-install-recommends g++-multilib ca-certificates -qq > /dev/null && \
     apt-get autoremove -qq > /dev/null && \
     rm -rf /var/lib/apt/lists/*
-RUN mkdir -p /home/user && \
+RUN mkdir -p /home/user/.callofduty4/main && \
     adduser --system user --home /home/user --uid 1000 && \
     chown -R user /home/user && \
     chmod -R 700 /home/user
