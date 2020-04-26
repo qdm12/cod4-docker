@@ -28,9 +28,8 @@
 
 - [Cod4x server features](https://github.com/callofduty4x/CoD4x_Server#the-most-prominent-features-are)
 - Works with custom mods and maps (see the [Mods section](#Mods))
-- Easily configurable with [docker-compose](#using-docker-compose)
+- Built-in HTTP file server for usermaps and mods (only works with .ff and .iwd files for security reasons)
 - Runs without root (safer)
-- Run a lightweight Apache HTTP server for your clients to download your mods and usermaps with docker-compose.yml
 - Default cod4 configuration file [server.cfg](https://github.com/qdm12/cod4-docker/blob/master/server.cfg) when not using mods, with `exec server.cfg`
 - `qmcgaw/cod4` or `qmcgaw/cod4:alpine`:
     - Only **21MB** and based on Alpine 3.11
@@ -63,7 +62,7 @@ We assume your *call of duty 4 game* is installed at `/mycod4path`
 1. Run the following command as root user on your host:
 
     ```bash
-    docker run -d --name=cod4 -p 28960:28960/udp \
+    docker run -d --name=cod4 -p 28960:28960/udp -p 8000:8000/tcp \
         -v /mycod4path/main:/home/user/cod4/main \
         -v /mycod4path/zone:/home/user/cod4/zone:ro \
         -v /mycod4path/mods:/home/user/cod4/mods \
@@ -81,6 +80,12 @@ We assume your *call of duty 4 game* is installed at `/mycod4path`
 
 ### HTTP server for custom mods and maps
 
+By default, the container runs with an HTTP file server for mods and usermaps on port `8000`.
+
+- You can disable it with `-e HTTP_SERVER=off`
+- You can change its published port with for example `-p 9000:8000/tcp`
+- You can change its root URL with for example `-e ROOT_URL=/cod4`. This is useful if you use a reverse proxy.
+
 1. Locate the relevant cod4 configuration file - for example `main/server.cfg` or `mods/mymod/server.cfg`
 1. Modify/add the following lines & change `youraddress` to your IP or domain name:
 
@@ -91,21 +96,7 @@ We assume your *call of duty 4 game* is installed at `/mycod4path`
     set sv_wwwDlDisconnected "0"
     ```
 
-1. Run the following Docker command:
-
-    ```bash
-    docker run -d --name=cod4-http -p 8000:80/tcp --restart=always \
-    -v $(pwd)/mods:/usr/local/apache2/htdocs/mods:ro \
-    -v $(pwd)/usermaps:/usr/local/apache2/htdocs/usermaps:ro httpd:alpine
-    ```
-
-    You can also uncomment the HTTP section in the the [*docker-compose.yml*](https://raw.githubusercontent.com/qdm12/cod4-docker/master/docker-compose.yml) file and run
-
-    ```bash
-    docker-compose up -d
-    ```
-
-1. You will have to setup port forwarding on your router. Ask me or Google if you need help.
+1. Feel free to open an issue for help setting this up, such as port forwarding or reverse proxy setup help
 
 ## Update your game
 
@@ -164,11 +155,9 @@ By default, the Docker image uses [this command](https://github.com/qdm12/cod4-d
 
 ## TODOs
 
-- HTTP static server for mods and usermaps
 - UDP proxy for Windows
-- Docker Healthcheck
-- HTTP healthcheck endpoint (i.e. for K8s)
 - Reload ability of cod4x
+- Docker Healthcheck + HTTP healthcheck endpoint (i.e. for K8s)
 - Add extra ping with udp proxy
 - More env variables
     - Plugins
