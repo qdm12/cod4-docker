@@ -31,10 +31,7 @@
 - Easily configurable with [docker-compose](#using-docker-compose)
 - Runs without root (safer)
 - Run a lightweight Apache HTTP server for your clients to download your mods and usermaps with docker-compose.yml
-- Default cod4 configuration file [server.cfg](https://github.com/qdm12/cod4-docker/blob/master/server.cfg)
-    - Placed into `./main`
-    - Launched by default when not using mods with `exec server.cfg`
-    - Easily changeable
+- Default cod4 configuration file [server.cfg](https://github.com/qdm12/cod4-docker/blob/master/server.cfg) when not using mods, with `exec server.cfg`
 - `qmcgaw/cod4` or `qmcgaw/cod4:alpine`:
     - Only **21MB** and based on Alpine 3.11
     - Does not work with the cod4x masterlist, see [this](https://github.com/qdm12/cod4-docker/issues/8)
@@ -61,7 +58,7 @@ We assume your *call of duty 4 game* is installed at `/mycod4path`
     chmod -R 700 main mods usermaps zone
     ```
 
-    You can also run the container with `--user="root"` (unadvised!)
+    You can also run the container with `--user="root"` (unadvised!) if this doesn't work
 
 1. Run the following command as root user on your host:
 
@@ -84,7 +81,7 @@ We assume your *call of duty 4 game* is installed at `/mycod4path`
 
 ### HTTP server for custom mods and maps
 
-1. Locate the relevant configuration file - for example `main/server.cfg` or `mods/mymod/server.cfg`
+1. Locate the relevant cod4 configuration file - for example `main/server.cfg` or `mods/mymod/server.cfg`
 1. Modify/add the following lines & change `youraddress` to your IP or domain name:
 
     ```c
@@ -143,7 +140,7 @@ Set the command line option to `+set dedicated 2+set sv_cheats "1"+set sv_maxcli
 ## Write protected args
 
 The following parameters are write protected and **can't be placed in the server configuration file**,
-and must be in the `ARGS` environment variable:
+and must be in the command passed to the container:
 
 - `+set dedicated 2` - 2: open to internet, 1: LAN, 0: localhost
 - `+set sv_cheats "1"` - 1 to allow cheats, 0 otherwise
@@ -155,12 +152,14 @@ and must be in the `ARGS` environment variable:
 - `+set net_port 28961` don't use if not needed
 - `+map_rotate` OR i.e. `+map mp_shipment` **should be the last launch argument**
 
+By default, the Docker image uses [this command](https://github.com/qdm12/cod4-docker/blob/master/Dockerfile#L68).
+
 ## Docker tags
 
 ➡️ [List of all tags](https://hub.docker.com/r/qmcgaw/cod4/tags)
 
-- `:v17.7.2` based on the latest available Github release for cod4xserver
 - `:abf4704` based on [this commit](https://github.com/callofduty4x/CoD4x_Server/commit/abf470469e8ff24d65cc5d28ab804b8621d43c9e) corresponding to version `:v17.8`
+- `:v17.7.2` based on the latest available Github release for cod4xserver
 - Feel free to open an issue for another Docker tag if you need one.
 
 ## TODOs
