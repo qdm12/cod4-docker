@@ -64,5 +64,5 @@ EXPOSE 28960/udp 28960/tcp 8000/tcp
 ENV \
     HTTP_SERVER=on \
     ROOT_URL=/
-COPY --from=files /tmp/ ./
+COPY --from=files --chown=1000 /tmp/ ./
 USER user
