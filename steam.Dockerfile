@@ -15,7 +15,7 @@ COPY cmd/main.go .
 COPY internal/ ./internal/
 RUN go test ./...
 RUN golangci-lint run --timeout=10m
-RUN go build -ldflags="-s -w" -o entrypoint main.go
+RUN go build -trimpath -ldflags="-s -w" -o entrypoint main.go
 
 FROM alpine:${ALPINE_VERSION} AS downloader
 WORKDIR /tmp

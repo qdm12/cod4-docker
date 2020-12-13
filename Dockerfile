@@ -15,7 +15,7 @@ COPY cmd/main.go .
 COPY internal/ ./internal/
 RUN go test ./...
 RUN golangci-lint run --timeout=10m
-RUN go build -ldflags="-s -w" -o entrypoint main.go
+RUN go build -trimpath -ldflags="-s -w" -o entrypoint main.go
 
 FROM debian:${DEBIAN_VERSION} AS builder
 ARG COD4X_VERSION=abf470469e8ff24d65cc5d28ab804b8621d43c9e
