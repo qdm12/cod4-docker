@@ -5,7 +5,7 @@ import (
 	libparams "github.com/qdm12/golibs/params"
 )
 
-// Reader contains methods to obtain parameters
+// Reader contains methods to obtain parameters.
 type Reader interface {
 	GetHTTPServer() (bool, error)
 	GetHTTPServerRootURL() (string, error)
@@ -21,7 +21,7 @@ type reader struct {
 }
 
 // Newreader returns a paramsReadeer object to read parameters from
-// environment variables
+// environment variables.
 func NewReader(logger logging.Logger) Reader {
 	return &reader{
 		envParams: libparams.NewEnvParams(),

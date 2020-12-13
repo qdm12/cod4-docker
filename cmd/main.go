@@ -45,7 +45,9 @@ func main() {
 		fatal(err)
 	}
 
-	if err := checkAreReadable(fileManager, uid, gid, "zone", "usermaps", "cod4x18_dedrun", "steam_api.so", "steamclient.so"); err != nil {
+	if err := checkAreReadable(fileManager, uid, gid,
+		"zone", "usermaps", "cod4x18_dedrun",
+		"steam_api.so", "steamclient.so"); err != nil {
 		fatal(err)
 	}
 

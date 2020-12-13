@@ -10,7 +10,7 @@ import (
 	"github.com/qdm12/cod4-docker/internal/params"
 )
 
-// Splash returns the welcome spash message
+// Splash returns the welcome spash message.
 func Splash(paramsReader params.Reader) string {
 	version := paramsReader.GetVersion()
 	vcsRef := paramsReader.GetVcsRef()
