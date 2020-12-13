@@ -10,29 +10,27 @@
     "shutdownAction": "stopCompose",
     "postCreateCommand": "go mod download",
     "workspaceFolder": "/workspace",
+    // "overrideCommand": "",
     "extensions": [
-        "ms-vscode.go",
-        "IBM.output-colorizer",
-        "eamodio.gitlens",
-        "mhutchie.git-graph",
+        "golang.go",
+        "eamodio.gitlens", // IDE Git information
         "davidanson.vscode-markdownlint",
-        "shardulm94.trailing-spaces",
-        "alefragnani.Bookmarks",
-        "Gruntfuggly.todo-tree",
-        "mohsen1.prettify-json",
-        "quicktype.quicktype",
-        "spikespaz.vscode-smoothtype",
-        "stkb.rewrap",
-        "vscode-icons-team.vscode-icons"
+        "ms-azuretools.vscode-docker", // Docker integration and linting
+        "shardulm94.trailing-spaces", // Show trailing spaces
+        "Gruntfuggly.todo-tree", // Highlights TODO comments
+        "bierner.emojisense", // Emoji sense for markdown
+        "stkb.rewrap", // rewrap comments after n characters on one line
+        "vscode-icons-team.vscode-icons", // Better file extension icons
+        "github.vscode-pull-request-github", // Github interaction
+        "redhat.vscode-yaml", // Kubernetes, Drone syntax highlighting
+        "bajdzis.vscode-database", // Supports connections to mysql or postgres, over SSL, socked
+        "IBM.output-colorizer", // Colorize your output/test logs
     ],
     "settings": {
-        // General settings
         "files.eol": "\n",
-        // Docker
         "remote.extensionKind": {
             "ms-azuretools.vscode-docker": "workspace"
         },
-        // Golang general settings
         "go.useLanguageServer": true,
         "go.autocompleteUnimportedPackages": true,
         "go.gotoSymbol.includeImports": true,
@@ -43,54 +41,6 @@
             "usePlaceholders": false
         },
         "go.lintTool": "golangci-lint",
-        "go.lintFlags": [
-            "--fast",
-            "--enable",
-            "rowserrcheck",
-            "--enable",
-            "bodyclose",
-            "--enable",
-            "dogsled",
-            "--enable",
-            "dupl",
-            "--enable",
-            "gochecknoglobals",
-            "--enable",
-            "gochecknoinits",
-            "--enable",
-            "gocognit",
-            "--enable",
-            "goconst",
-            "--enable",
-            "gocritic",
-            "--enable",
-            "gocyclo",
-            "--enable",
-            "goimports",
-            "--enable",
-            "golint",
-            "--enable",
-            "gosec",
-            "--enable",
-            "interfacer",
-            "--enable",
-            "maligned",
-            "--enable",
-            "misspell",
-            "--enable",
-            "nakedret",
-            "--enable",
-            "prealloc",
-            "--enable",
-            "scopelint",
-            "--enable",
-            "unconvert",
-            "--enable",
-            "unparam",
-            "--enable",
-            "whitespace"
-        ],
-        // Golang on save
         "go.buildOnSave": "workspace",
         "go.lintOnSave": "workspace",
         "go.vetOnSave": "workspace",
@@ -100,17 +50,20 @@
                 "source.organizeImports": true
             }
         },
-        // Golang testing
         "go.toolsEnvVars": {
-            "GOFLAGS": "-tags="
+            "GOFLAGS": "-tags=",
+            // "CGO_ENABLED": 1 // for the race detector
         },
         "gopls.env": {
             "GOFLAGS": "-tags="
         },
         "go.testEnvVars": {},
         "go.testFlags": [
-            "-v"
+            "-v",
+            // "-race"
         ],
-        "go.testTimeout": "600s"
+        "go.testTimeout": "10s",
+        "go.coverOnSingleTest": true,
+        "go.coverOnSingleTestFile": true,
     }
 }
