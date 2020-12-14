@@ -1,11 +1,11 @@
-version: '3.7'
+version: "3.7"
 services:
   cod4:
     image: qmcgaw/cod4
     container_name: cod4
     volumes:
       - ./main:/home/user/cod4/main
-      - ./zone:/home/user/cod4/zone:ro
+      - ./zone:/home/user/cod4/zone
       - ./mods:/home/user/cod4/mods
       - ./usermaps:/home/user/cod4/usermaps:ro
       - ./logs:/home/user/.callofduty4

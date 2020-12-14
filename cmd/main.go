@@ -66,6 +66,24 @@ func main() {
 		}
 	}
 
+	jCod4xExists, err := fileManager.FileExists("main/jcod4x_00.iwd")
+	if err != nil {
+		fatal(err)
+	} else if !jCod4xExists {
+		if err := fileManager.CopyFile("jcod4x_00.iwd", "main/jcod4x_00.iwd"); err != nil {
+			fatal(err)
+		}
+	}
+
+	cod4xPatchv2Exists, err := fileManager.FileExists("zone/cod4x_patchv2.ff")
+	if err != nil {
+		fatal(err)
+	} else if !cod4xPatchv2Exists {
+		if err := fileManager.CopyFile("cod4x_patchv2.ff", "zone/cod4x_patchv2.ff"); err != nil {
+			fatal(err)
+		}
+	}
+
 	defaultServerConfigExists, err := fileManager.FileExists("main/server.cfg")
 	if err != nil {
 		fatal(err)

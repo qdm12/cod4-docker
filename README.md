@@ -24,6 +24,8 @@
 - COD4 running on version 1.7 have to [update to 17.9](#update-your-game)
 - Original COD4 **main** and **zone** files required (from the client installation directory)
 
+⚠️ Version v19.x and up requires to bind mount `zone` without read only `:ro`
+
 ## Features
 
 - [Cod4x server features](https://github.com/callofduty4x/CoD4x_Server#the-most-prominent-features-are)
@@ -64,7 +66,7 @@ We assume your *call of duty 4 game* is installed at `/mycod4path`
     ```bash
     docker run -d --name=cod4 -p 28960:28960/tcp -p 28960:28960/udp -p 8000:8000/tcp \
         -v /mycod4path/main:/home/user/cod4/main \
-        -v /mycod4path/zone:/home/user/cod4/zone:ro \
+        -v /mycod4path/zone:/home/user/cod4/zone \
         -v /mycod4path/mods:/home/user/cod4/mods \
         -v /mycod4path/usermaps:/home/user/cod4/usermaps:ro \
         qmcgaw/cod4 +map mp_shipment

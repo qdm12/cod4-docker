@@ -19,23 +19,38 @@ RUN go build -trimpath -ldflags="-s -w" -o entrypoint main.go
 
 FROM alpine:${ALPINE_VERSION} AS downloader
 WORKDIR /tmp
-ARG COD4X_VERSION=18.0
+ARG COD4X_VERSION=19.0
 RUN apk add --update --no-cache -q --progress unzip && \
     wget -qO cod4x_server-linux.zip https://cod4x.me/downloads/cod4x_server-linux_${COD4X_VERSION}.zip && \
-    unzip -q cod4x_server-linux.zip -d cod4x && \
+    unzip -q cod4x_server-linux.zip -d . && \
     rm cod4x_server-linux.zip && \
     apk del unzip && \
-    mv cod4x/cod4x18_dedrun cod4x/main/xbase_00.iwd cod4x/steam_api.so cod4x/steamclient.so ./ && \
-    rm -r cod4x
+    mv \
+    cod4x-linux-server/main/xbase_00.iwd \
+    cod4x-linux-server/main/jcod4x_00.iwd \
+    cod4x-linux-server/zone/cod4x_patchv2.ff \
+    cod4x-linux-server/steam_api.so \
+    cod4x-linux-server/steamclient.so \
+    cod4x-linux-server/cod4x18_dedrun \
+    ./ && \
+    rm -r cod4x-linux-server
 
 FROM alpine:${ALPINE_VERSION} AS files
 WORKDIR /tmp
-COPY --from=downloader /tmp/xbase_00.iwd /tmp/steam_api.so /tmp/steamclient.so /tmp/cod4x18_dedrun ./
+COPY --from=downloader \
+    /tmp/xbase_00.iwd \
+    /tmp/jcod4x_00.iwd \
+    /tmp/cod4x_patchv2.ff \
+    /tmp/steam_api.so \
+    /tmp/steamclient.so \
+    /tmp/cod4x18_dedrun \
+    ./
 COPY server.cfg .
 COPY --from=entrypoint /tmp/gobuild/entrypoint .
+RUN touch autoupdate.lock
 RUN chown 1000 * && \
     chmod 500 entrypoint cod4x18_dedrun steam_api.so steamclient.so && \
-    chmod 400 xbase_00.iwd server.cfg
+    chmod 400 xbase_00.iwd jcod4x_00.iwd cod4x_patchv2.ff server.cfg
 
 FROM debian:${DEBIAN_VERSION}
 ARG BUILD_DATE

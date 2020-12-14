@@ -22,7 +22,7 @@ RUN dpkg --add-architecture i386 && \
     apt-get -qq update && \
     apt-get -qq install -y nasm:i386 build-essential gcc-multilib g++-multilib paxctl wget
 WORKDIR /cod4
-ARG COD4X_VERSION=abf470469e8ff24d65cc5d28ab804b8621d43c9e
+ARG COD4X_VERSION=v19.0.4
 RUN wget -q https://github.com/callofduty4x/CoD4x_Server/archive/${COD4X_VERSION}.tar.gz && \
     tar -xzf ${COD4X_VERSION}.tar.gz --strip-components=1 && \
     rm ${COD4X_VERSION}.tar.gz && \
@@ -31,25 +31,37 @@ RUN wget -q https://github.com/callofduty4x/CoD4x_Server/archive/${COD4X_VERSION
 
 FROM alpine:${ALPINE_VERSION} AS downloader
 WORKDIR /tmp
-ARG COD4X_VERSION=18.0
+ARG COD4X_VERSION=19.0
 RUN apk add --update --no-cache -q --progress unzip && \
     wget -qO cod4x_server-linux.zip https://cod4x.me/downloads/cod4x_server-linux_${COD4X_VERSION}.zip && \
-    unzip -q cod4x_server-linux.zip -d cod4x && \
+    unzip -q cod4x_server-linux.zip -d . && \
     rm cod4x_server-linux.zip && \
     apk del unzip && \
-    mv cod4x/main/xbase_00.iwd ./ && \
-    rm -r cod4x
+    mv \
+    cod4x-linux-server/main/xbase_00.iwd \
+    cod4x-linux-server/main/jcod4x_00.iwd \
+    cod4x-linux-server/zone/cod4x_patchv2.ff \
+    cod4x-linux-server/steam_api.so \
+    cod4x-linux-server/steamclient.so \
+    ./ && \
+    rm -r cod4x-linux-server
 
 FROM alpine:${ALPINE_VERSION} AS files
 WORKDIR /tmp
 RUN touch steam_api.so steamclient.so
-COPY --from=downloader /tmp/xbase_00.iwd .
+COPY --from=downloader \
+    /tmp/xbase_00.iwd \
+    /tmp/jcod4x_00.iwd \
+    /tmp/cod4x_patchv2.ff \
+    /tmp/steam_api.so \
+    /tmp/steamclient.so \
+    ./
 COPY --from=builder /cod4/bin/cod4x18_dedrun .
 COPY server.cfg .
 COPY --from=entrypoint /tmp/gobuild/entrypoint .
 RUN chown 1000 * && \
     chmod 500 entrypoint cod4x18_dedrun steam_api.so steamclient.so && \
-    chmod 400 xbase_00.iwd server.cfg
+    chmod 400 xbase_00.iwd jcod4x_00.iwd cod4x_patchv2.ff server.cfg
 
 FROM alpine:${ALPINE_VERSION}
 ARG BUILD_DATE
