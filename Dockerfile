@@ -31,8 +31,9 @@ RUN wget -q https://github.com/callofduty4x/CoD4x_Server/archive/${COD4X_VERSION
 
 FROM alpine:${ALPINE_VERSION} AS downloader
 WORKDIR /tmp
+ARG COD4X_VERSION=18.0
 RUN apk add --update --no-cache -q --progress unzip && \
-    wget -q https://cod4x.me/downloads/cod4x_server-linux.zip && \
+    wget -qO cod4x_server-linux.zip https://cod4x.me/downloads/cod4x_server-linux_${COD4X_VERSION}.zip && \
     unzip -q cod4x_server-linux.zip -d cod4x && \
     rm cod4x_server-linux.zip && \
     apk del unzip && \
