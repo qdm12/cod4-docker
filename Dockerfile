@@ -41,8 +41,6 @@ RUN apk add --update --no-cache -q --progress unzip && \
     cod4x-linux-server/main/xbase_00.iwd \
     cod4x-linux-server/main/jcod4x_00.iwd \
     cod4x-linux-server/zone/cod4x_patchv2.ff \
-    cod4x-linux-server/steam_api.so \
-    cod4x-linux-server/steamclient.so \
     ./ && \
     rm -r cod4x-linux-server
 
@@ -53,8 +51,6 @@ COPY --from=downloader \
     /tmp/xbase_00.iwd \
     /tmp/jcod4x_00.iwd \
     /tmp/cod4x_patchv2.ff \
-    /tmp/steam_api.so \
-    /tmp/steamclient.so \
     ./
 COPY --from=builder /cod4/bin/cod4x18_dedrun .
 COPY server.cfg .
