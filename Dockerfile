@@ -18,11 +18,11 @@ RUN golangci-lint run --timeout=10m
 RUN go build -trimpath -ldflags="-s -w" -o entrypoint main.go
 
 FROM debian:${DEBIAN_VERSION} AS builder
-ARG COD4X_VERSION=abf470469e8ff24d65cc5d28ab804b8621d43c9e
 RUN dpkg --add-architecture i386 && \
     apt-get -qq update && \
-    apt-get -qq install -y nasm:i386 build-essential gcc-multilib g++-multilib unzip paxctl wget git
+    apt-get -qq install -y nasm:i386 build-essential gcc-multilib g++-multilib paxctl wget
 WORKDIR /cod4
+ARG COD4X_VERSION=abf470469e8ff24d65cc5d28ab804b8621d43c9e
 RUN wget -q https://github.com/callofduty4x/CoD4x_Server/archive/${COD4X_VERSION}.tar.gz && \
     tar -xzf ${COD4X_VERSION}.tar.gz --strip-components=1 && \
     rm ${COD4X_VERSION}.tar.gz && \
