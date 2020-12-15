@@ -7,17 +7,13 @@ import (
 
 	"github.com/kyokomi/emoji"
 	"github.com/qdm12/cod4-docker/internal/constants"
-	"github.com/qdm12/cod4-docker/internal/params"
 )
 
 // Splash returns the welcome spash message.
-func Splash(paramsReader params.Reader) string {
-	version := paramsReader.GetVersion()
-	vcsRef := paramsReader.GetVcsRef()
-	buildDate := paramsReader.GetBuildDate()
+func Splash(version, buildDate, commit string) string {
 	lines := title()
 	lines = append(lines, "")
-	lines = append(lines, fmt.Sprintf("Running version %s built on %s (commit %s)", version, buildDate, vcsRef))
+	lines = append(lines, fmt.Sprintf("Running version %s built on %s (commit %s)", version, buildDate, commit))
 	lines = append(lines, "")
 	lines = append(lines, announcement()...)
 	lines = append(lines, "")

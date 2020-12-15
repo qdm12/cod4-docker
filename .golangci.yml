@@ -10,6 +10,14 @@ issues:
       linters:
         - dupl
         - maligned
+    - path: main\.go
+      text: buildDate is a global variable
+      linters:
+        - gochecknoglobals
+    - path: main\.go
+      text: commit is a global variable
+      linters:
+        - gochecknoglobals
 
 linters:
   disable-all: true

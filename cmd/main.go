@@ -17,6 +17,12 @@ import (
 	"github.com/qdm12/golibs/logging"
 )
 
+var (
+	version   string
+	buildDate string
+	commit    string
+)
+
 func main() {
 	logger, err := logging.NewLogger(logging.ConsoleEncoding, logging.InfoLevel)
 	if err != nil {
@@ -25,8 +31,7 @@ func main() {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	paramsReader := params.NewReader(logger)
-	fmt.Println(splash.Splash(paramsReader))
+	fmt.Println(splash.Splash(version, buildDate, commit))
 
 	fatal := func(args ...interface{}) {
 		logger.Error(args...)
@@ -99,6 +104,8 @@ func main() {
 		cod4xArguments[i] = os.Args[i]
 	}
 	logger.Info("COD4x arguments: %s", strings.Join(cod4xArguments, " "))
+
+	paramsReader := params.NewReader(logger)
 
 	commander := command.NewCommander()
 	streamMerger := command.NewStreamMerger()

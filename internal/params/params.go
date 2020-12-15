@@ -9,10 +9,6 @@ import (
 type Reader interface {
 	GetHTTPServer() (bool, error)
 	GetHTTPServerRootURL() (string, error)
-	// Version getters
-	GetVersion() string
-	GetBuildDate() string
-	GetVcsRef() string
 }
 
 type reader struct {
@@ -35,19 +31,4 @@ func (p *reader) GetHTTPServer() (bool, error) {
 
 func (p *reader) GetHTTPServerRootURL() (rootURL string, err error) {
 	return p.envParams.GetRootURL()
-}
-
-func (p *reader) GetVersion() string {
-	version, _ := p.envParams.GetEnv("VERSION", libparams.Default("?"), libparams.CaseSensitiveValue())
-	return version
-}
-
-func (p *reader) GetBuildDate() string {
-	buildDate, _ := p.envParams.GetEnv("BUILD_DATE", libparams.Default("?"), libparams.CaseSensitiveValue())
-	return buildDate
-}
-
-func (p *reader) GetVcsRef() string {
-	buildDate, _ := p.envParams.GetEnv("VCS_REF", libparams.Default("?"), libparams.CaseSensitiveValue())
-	return buildDate
 }
