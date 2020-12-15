@@ -21,7 +21,7 @@
 ## Requirements
 
 - COD4 Client game
-- COD4 running on version 1.7 have to [update to 17.9](#update-your-game)
+- COD4 running on version 1.7 have to [update to 1.8-19.0](#update-your-game)
 - Original COD4 **main** and **zone** files required (from the client installation directory)
 
 ⚠️ Version v19.x and up requires to bind mount `zone` without read only `:ro`
@@ -33,14 +33,17 @@
 - Built-in HTTP file server for usermaps and mods (only works with .ff and .iwd files for security reasons)
 - Runs without root (safer)
 - Default cod4 configuration file [server.cfg](https://github.com/qdm12/cod4-docker/blob/master/server.cfg) when not using mods, with `exec server.cfg`
-- `qmcgaw/cod4` or `qmcgaw/cod4:alpine`:
-    - Only **21MB** and based on Alpine 3.11
-    - Does not work with the cod4x masterlist, see [this](https://github.com/qdm12/cod4-docker/issues/8)
-    - [Cod4x](https://github.com/callofduty4x/CoD4x_Server) server built from source
-- `qmcgaw/cod4:steam`:
-    - 385MB and based on Debian Buster Slim
-    - Works with the cod4x masterlist
-    - [Cod4x](https://github.com/callofduty4x/CoD4x_Server) server downloaded from [cod4x.me](https://cod4x.me)
+- Multiple Docker images
+    - `qmcgaw/cod4:steam`:
+        - 385MB and based on Debian Buster Slim
+        - Works with the cod4x masterlist
+        - [Cod4x](https://github.com/callofduty4x/CoD4x_Server) server downloaded from [cod4x.me](https://cod4x.me)
+    - `qmcgaw/cod4`, `qmcgaw/cod4:alpine`:
+        - Only **21MB** and based on Alpine 3.11
+        - Does not work with the cod4x masterlist, see [this](https://github.com/qdm12/cod4-docker/issues/8)
+        - [Cod4x](https://github.com/callofduty4x/CoD4x_Server) server built from source statically
+    - [Other Docker image tags](https://hub.docker.com/r/qmcgaw/cod4/tags) such as `v17.8-update-1`
+    - Feel free to open an issue for another Docker tag if you need one
 
 ## Setup
 
@@ -103,14 +106,14 @@ By default, the container runs with an HTTP file server for mods and usermaps on
 ## Update your game
 
 1. Make sure you updated your game to version 1.7 first (see [this](https://cod4x.me/index.php?/forums/topic/12-how-to-install-cod4x/))
-1. Download the [COD4x client ZIP file](https://cod4x.me/downloads/cod4x_client_17_9.zip)
-1. Using Winrar / 7Zip / Winzip, extract **cod4x_client_17_9.zip** to your COD4 game directory
+1. Download the [COD4x client ZIP file](https://cod4x.me/downloads/cod4x_client_19_0.zip)
+1. Using Winrar / 7Zip / Winzip, extract **cod4x_client_19_0.zip** to your COD4 game directory
 1. Go in the extracted directory *cod4x_18_v17_9_client* and double click on **install.cmd**
-1. When launching the multiplayer game, you should see at the bottom right `17.9`
+1. When launching the multiplayer game, you should see at the bottom right `19.0`
 
 ## Testing
 
-1. Make sure you [updated your COD4 Game to 1.8](#update-your-game)
+1. Make sure you [updated your COD4 Game to 1.8-19.0](#update-your-game)
 1. Launch the COD4 multiplayer game
 1. Click on **Join Game**
 1. Click on **Source** at the top until it's set on *Favourites*
@@ -146,14 +149,6 @@ and must be in the command passed to the container:
 - `+map_rotate` OR i.e. `+map mp_shipment` **should be the last launch argument**
 
 By default, the Docker image uses [this command](https://github.com/qdm12/cod4-docker/blob/master/Dockerfile#L68).
-
-## Docker tags
-
-➡️ [List of all tags](https://hub.docker.com/r/qmcgaw/cod4/tags)
-
-- `:abf4704` based on [this commit](https://github.com/callofduty4x/CoD4x_Server/commit/abf470469e8ff24d65cc5d28ab804b8621d43c9e) corresponding to version `:v17.8`
-- `:v17.7.2` based on the latest available Github release for cod4xserver
-- Feel free to open an issue for another Docker tag if you need one.
 
 ## TODOs
 
