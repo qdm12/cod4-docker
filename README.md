@@ -83,6 +83,12 @@ We assume your *call of duty 4 game* is installed at `/mycod4path`
     docker-compose up -d
     ```
 
+## Docker tags
+
+For each [Github release tag](https://github.com/qdm12/cod4-docker/releases) there is a corresponding Docker tag built.
+
+For example: `qmcgaw/cod4:v19.0.4.0`.
+
 ### HTTP server for custom mods and maps
 
 By default, the container runs with an HTTP file server for mods and usermaps on port `8000`.
