@@ -111,7 +111,7 @@ By default, the container runs with an HTTP file server for mods and usermaps on
 1. Make sure you updated your game to version 1.7 first (see [this](https://cod4x.me/index.php?/forums/topic/12-how-to-install-cod4x/))
 1. Download the [COD4x client ZIP file](https://cod4x.me/downloads/cod4x_client_19_0.zip)
 1. Using Winrar / 7Zip / Winzip, extract **cod4x_client_19_0.zip** to your COD4 game directory
-1. Go in the extracted directory *cod4x_18_v17_9_client* and double click on **install.cmd**
+1. Go in the extracted directory *cod4-client-manualinstall_19.0* and double click on **install.cmd**
 1. When launching the multiplayer game, you should see at the bottom right `19.0`
 
 ## Testing
