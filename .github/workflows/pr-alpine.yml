@@ -1,9 +1,9 @@
-name: Docker build
+name: PR Alpine Docker build
 on:
   pull_request:
     branches: [master]
     paths:
-      - .github/workflows/build.yml
+      - .github/workflows/pr-alpine.yml
       - cmd/**
       - internal/**
       - .dockerignore
@@ -12,20 +12,12 @@ on:
       - go.mod
       - go.sum
       - server.cfg
-      - Dockerfile
-      - steam.Dockerfile
+
 jobs:
-  alpine:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Build image
         run: docker build .
-  debian:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Build image
-        run: docker build -f steam.Dockerfile .

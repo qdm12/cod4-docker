@@ -1,40 +1,27 @@
-name: Buildx release
+name: Release Debian build
 on:
   release:
     types: [published]
     paths:
-      - .github/workflows/buildx-release.yml
+      - .github/workflows/release-debian.yml
       - cmd/**
       - internal/**
       - .dockerignore
       - .golangci.yml
-      - Dockerfile
+      - steam.Dockerfile
       - go.mod
       - go.sum
       - server.cfg
-      - Dockerfile
-      - steam.Dockerfile
 jobs:
   buildx:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - name: Buildx setup
-        uses: crazy-max/ghaction-docker-buildx@v1
+        uses: crazy-max/ghaction-docker-buildx@v3
       - name: Dockerhub login
         run: echo ${{ secrets.DOCKERHUB_PASSWORD }} | docker login -u qmcgaw --password-stdin 2>&1
-      - name: Buildx Alpine image
-        run: |
-          docker buildx build \
-            --progress plain \
-            --platform=linux/amd64,linux/386 \
-            --build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` \
-            --build-arg COMMIT=`git rev-parse --short HEAD` \
-            --build-arg VERSION=${GITHUB_REF##*/} \
-            -t qmcgaw/cod4:${GITHUB_REF##*/} \
-            --push \
-            .
-      - name: Buildx Debian Steam image
+      - name: Build
         run: |
           docker buildx build \
             --progress plain \
@@ -46,4 +33,3 @@ jobs:
             -t qmcgaw/cod4:steam-${GITHUB_REF##*/} \
             --push \
             .
-      - run: curl -X POST https://hooks.microbadger.com/images/qmcgaw/cod4/8mWxKyC34UYWUF7BRtDpbB8WWt4= || exit 0
