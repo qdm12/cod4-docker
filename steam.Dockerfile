@@ -24,6 +24,16 @@ RUN go build -trimpath -ldflags="-s -w \
     -X 'main.commit=$COMMIT' \
     " -o entrypoint main.go
 
+FROM debian:${DEBIAN_VERSION} AS builder
+RUN dpkg --add-architecture i386 && \
+    apt-get -qq update && \
+    apt-get -qq install -y nasm:i386 build-essential gcc-multilib g++-multilib paxctl wget
+WORKDIR /cod4
+ARG COD4X_VERSION=v19.0.4
+RUN wget -qO- https://github.com/callofduty4x/CoD4x_Server/archive/${COD4X_VERSION}.tar.gz | \
+    tar -xz --strip-components=1 && \
+    make
+
 FROM alpine:${ALPINE_VERSION} AS downloader
 WORKDIR /tmp
 ARG COD4X_VERSION=19.0
@@ -38,7 +48,6 @@ RUN apk add --update --no-cache -q --progress unzip && \
     cod4x-linux-server/zone/cod4x_patchv2.ff \
     cod4x-linux-server/steam_api.so \
     cod4x-linux-server/steamclient.so \
-    cod4x-linux-server/cod4x18_dedrun \
     ./ && \
     rm -r cod4x-linux-server
 
@@ -50,8 +59,8 @@ COPY --from=downloader \
     /tmp/cod4x_patchv2.ff \
     /tmp/steam_api.so \
     /tmp/steamclient.so \
-    /tmp/cod4x18_dedrun \
     ./
+COPY --from=builder /cod4/bin/cod4x18_dedrun .
 COPY server.cfg .
 COPY --from=entrypoint /tmp/gobuild/entrypoint .
 RUN touch autoupdate.lock
