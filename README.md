@@ -35,14 +35,17 @@
 - Default cod4 configuration file [server.cfg](https://github.com/qdm12/cod4-docker/blob/master/server.cfg) when not using mods, with `exec server.cfg`
 - Multiple Docker images
     - `qmcgaw/cod4:steam`:
-        - 385MB and based on Debian Buster Slim
+        - 368MB and based on Debian Buster Slim
         - Works with the cod4x masterlist
-        - [Cod4x](https://github.com/callofduty4x/CoD4x_Server) server downloaded from [cod4x.me](https://cod4x.me)
+        - [Cod4x](https://github.com/callofduty4x/CoD4x_Server) server built from source statically
+        - Other Cod4x files server downloaded from [cod4x.me](https://cod4x.me)
     - `qmcgaw/cod4`, `qmcgaw/cod4:alpine`:
-        - Only **21MB** and based on Alpine 3.11
+        - Only **24MB** and based on Alpine 3.12
         - Does not work with the cod4x masterlist, see [this](https://github.com/qdm12/cod4-docker/issues/8)
         - [Cod4x](https://github.com/callofduty4x/CoD4x_Server) server built from source statically
-    - [Other Docker image tags](https://hub.docker.com/r/qmcgaw/cod4/tags) such as `v17.8-update-1`
+    - For each [Github release tag](https://github.com/qdm12/cod4-docker/releases) there are two Docker images built:
+        - `:<tag-name>` is the Alpine based image
+        - `:<tag-name>-steam` is the larger Debian based image which supports steam and other features
     - Feel free to open an issue for another Docker tag if you need one
 
 ## Setup
@@ -82,12 +85,6 @@ We assume your *call of duty 4 game* is installed at `/mycod4path`
     ```bash
     docker-compose up -d
     ```
-
-## Docker tags
-
-For each [Github release tag](https://github.com/qdm12/cod4-docker/releases) there is a corresponding Docker tag built.
-
-For example: `qmcgaw/cod4:v19.0.4.0`.
 
 ### HTTP server for custom mods and maps
 
