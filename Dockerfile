@@ -30,9 +30,8 @@ RUN dpkg --add-architecture i386 && \
     apt-get -qq install -y nasm:i386 build-essential gcc-multilib g++-multilib paxctl wget
 WORKDIR /cod4
 ARG COD4X_VERSION=v19.0.4
-RUN wget -q https://github.com/callofduty4x/CoD4x_Server/archive/${COD4X_VERSION}.tar.gz && \
-    tar -xzf ${COD4X_VERSION}.tar.gz --strip-components=1 && \
-    rm ${COD4X_VERSION}.tar.gz && \
+RUN wget -qO- https://github.com/callofduty4x/CoD4x_Server/archive/${COD4X_VERSION}.tar.gz | \
+    tar -xz --strip-components=1 && \
     sed -i 's/LINUX_LFLAGS=/LINUX_LFLAGS=-static /' makefile && \
     make
 
