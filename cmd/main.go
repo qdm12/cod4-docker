@@ -141,6 +141,7 @@ func main() {
 	}
 
 	wg := &sync.WaitGroup{}
+	defer wg.Done()
 
 	if httpServer {
 		logger.Info("HTTP static files server enabled")
@@ -149,6 +150,7 @@ func main() {
 			fatal(err)
 		}
 		server := server.New("0.0.0.0:8000", rootURL, logger)
+		wg.Add(1)
 		go server.Run(ctx, wg)
 	}
 	if err := wait(); err != nil {
