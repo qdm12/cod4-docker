@@ -75,7 +75,9 @@ COPY --from=builder /cod4/bin/cod4x18_dedrun .
 COPY server.cfg .
 COPY --from=entrypoint /tmp/gobuild/entrypoint .
 RUN touch autoupdate.lock cod4x18_dedrun.new steam_api.so.new
-RUN chown 1000 * && \
+ARG UID=1000
+ARG GID=1000
+RUN chown ${UID}:${GID} * && \
     chmod 600 cod4x18_dedrun.new steam_api.so.new && \
     chmod 500 entrypoint cod4x18_dedrun steam_api.so steamclient.so && \
     chmod 400 xbase_00.iwd jcod4x_00.iwd cod4x_patchv2.ff server.cfg
@@ -85,12 +87,15 @@ RUN apt-get update -qq > /dev/null && \
     apt-get install --no-install-recommends g++-multilib ca-certificates -qq > /dev/null && \
     apt-get autoremove -qq > /dev/null && \
     rm -rf /var/lib/apt/lists/*
+ARG UID=1000
+ARG GID=1000
 RUN mkdir -p /home/user/.callofduty4/main && \
-    adduser --system user --home /home/user --uid 1000 && \
+    addgroup --gid 1000 cod4 && \
+    adduser --system user --home /home/user --uid ${UID} --gid ${GID} && \
     chown -R user /home/user && \
     chmod -R 700 /home/user
 WORKDIR /home/user/cod4
-RUN chown 1000 /home/user/cod4
+RUN chown ${UID}:${GID} /home/user/cod4
 ENTRYPOINT [ "/home/user/cod4/entrypoint" ]
 CMD +set dedicated 2+set sv_cheats "1"+set sv_maxclients "64"+exec server.cfg+map_rotate
 EXPOSE 28960/udp 28960/tcp 8000/tcp
@@ -98,7 +103,7 @@ ENV \
     HTTP_SERVER=on \
     ROOT_URL=/
 USER user
-COPY --from=files --chown=1000 /tmp/ ./
+COPY --from=files --chown=${UID}:${GID} /tmp/ ./
 ARG VERSION=unknown
 ARG BUILD_DATE="an unknown date"
 ARG COMMIT=unknown
