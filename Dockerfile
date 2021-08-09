@@ -38,7 +38,7 @@ RUN dpkg --add-architecture i386 && \
     apt-get -qq update && \
     apt-get -qq install -y nasm:i386 build-essential gcc-multilib g++-multilib paxctl wget
 WORKDIR /cod4
-ARG COD4X_VERSION=v19.3.0
+ARG COD4X_VERSION=20.0
 RUN wget -qO- https://github.com/callofduty4x/CoD4x_Server/archive/${COD4X_VERSION}.tar.gz | \
     tar -xz --strip-components=1 && \
     sed -i 's/LINUX_LFLAGS=/LINUX_LFLAGS=-static /' makefile && \
@@ -46,18 +46,19 @@ RUN wget -qO- https://github.com/callofduty4x/CoD4x_Server/archive/${COD4X_VERSI
 
 FROM --platform=${BUILDPLATFORM} alpine:${ALPINE_VERSION} AS downloader
 WORKDIR /tmp
-ARG COD4X_VERSION=19.3
+ARG COD4X_VERSION=20.0
 RUN apk add --update --no-cache -q --progress unzip && \
     wget -qO cod4x_server-linux.zip https://cod4x.me/downloads/cod4x_server-linux_${COD4X_VERSION}.zip && \
     unzip -q cod4x_server-linux.zip -d . && \
     rm cod4x_server-linux.zip && \
     apk del unzip && \
+    dirname="cod4x_server-linux_${COD4X_VERSION}" && \
     mv \
-    cod4x-linux-server/main/xbase_00.iwd \
-    cod4x-linux-server/main/jcod4x_00.iwd \
-    cod4x-linux-server/zone/cod4x_patchv2.ff \
+    ${dirname}/cod4x-linux-server/main/xbase_00.iwd \
+    ${dirname}/cod4x-linux-server/main/jcod4x_00.iwd \
+    ${dirname}/cod4x-linux-server/zone/cod4x_patchv2.ff \
     ./ && \
-    rm -r cod4x-linux-server
+    rm -r ${dirname}
 
 FROM --platform=${BUILDPLATFORM} alpine:${ALPINE_VERSION} AS files
 WORKDIR /tmp

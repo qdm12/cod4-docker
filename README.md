@@ -22,8 +22,6 @@ Call of duty 4 dedicated server in a 24MB Docker image
 - COD4 running on version 1.7 have to [update to 1.8-19.0](#update-your-game)
 - Original COD4 **main** and **zone** files required (from the client installation directory)
 
-⚠️ Version v19.x and up requires to bind mount `zone` without read only `:ro`
-
 ## Features
 
 - [Cod4x server features](https://github.com/callofduty4x/CoD4x_Server#the-most-prominent-features-are)
