@@ -1,6 +1,6 @@
 ARG DEBIAN_VERSION=buster-slim
 ARG ALPINE_VERSION=3.14
-ARG GO_VERSION=1.15
+ARG GO_VERSION=1.16
 
 FROM golang:${GO_VERSION}-alpine${ALPINE_VERSION} AS entrypoint
 RUN apk --update add git

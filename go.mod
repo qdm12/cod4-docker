@@ -1,6 +1,6 @@
 module github.com/qdm12/cod4-docker
 
-go 1.14
+go 1.16
 
 require (
 	github.com/fatih/color v1.10.0
