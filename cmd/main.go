@@ -142,17 +142,20 @@ func main() {
 	wg.Add(1)
 	go logStreamLines(ctx, wg, logger, stdoutLines, stderrLines)
 
+	serverDone := make(chan struct{})
 	if settings.HTTPServer.Enabled {
 		logger.Info("HTTP static files server enabled")
 		server := server.New("0.0.0.0:8000", settings.HTTPServer.RootURL, logger)
-		wg.Add(1)
-		go server.Run(ctx, wg)
+		go server.Run(ctx, serverDone)
+	} else {
+		close(serverDone)
 	}
 
 	err = <-waitError
 	if err != nil {
 		fatal(err)
 	}
+	<-serverDone
 }
 
 var (

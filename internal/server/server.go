@@ -3,33 +3,34 @@ package server
 import (
 	"context"
 	"net/http"
-	"sync"
 	"time"
 
 	"github.com/qdm12/golibs/logging"
 )
 
-type Server interface {
-	Run(ctx context.Context, wg *sync.WaitGroup)
+var _ Runner = (*Server)(nil)
+
+type Runner interface {
+	Run(ctx context.Context, done chan<- struct{})
 }
 
-type server struct {
+type Server struct {
 	address string
 	logger  logging.Logger
 	handler http.Handler
 }
 
-func New(address, rootURL string, logger logging.Logger) Server {
+func New(address, rootURL string, logger logging.Logger) *Server {
 	handler := newHandler(rootURL, logger)
-	return &server{
+	return &Server{
 		address: address,
 		logger:  logger,
 		handler: handler,
 	}
 }
 
-func (s *server) Run(ctx context.Context, wg *sync.WaitGroup) {
-	defer wg.Done()
+func (s *Server) Run(ctx context.Context, done chan<- struct{}) {
+	defer close(done)
 	server := http.Server{Addr: s.address, Handler: s.handler}
 	go func() {
 		<-ctx.Done()
