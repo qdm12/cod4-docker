@@ -1,14 +1,18 @@
+ARG BUILDPLATFORM=linux/amd64
 ARG DEBIAN_VERSION=buster-slim
 ARG ALPINE_VERSION=3.14
 ARG GO_VERSION=1.16
 ARG GOLANGCI_LINT_VERSION=v1.41.1
+ARG XCPUTRANSLATE_VERSION=v0.6.0
 
-FROM qmcgaw/binpot:golangci-lint-${GOLANGCI_LINT_VERSION} AS golangci-lint
+FROM --platform=${BUILDPLATFORM} qmcgaw/xcputranslate:${XCPUTRANSLATE_VERSION} AS xcputranslate
+FROM --platform=${BUILDPLATFORM} qmcgaw/binpot:golangci-lint-${GOLANGCI_LINT_VERSION} AS golangci-lint
 
-FROM golang:${GO_VERSION}-alpine${ALPINE_VERSION} AS entrypoint
+FROM --platform=${BUILDPLATFORM} golang:${GO_VERSION}-alpine${ALPINE_VERSION} AS entrypoint
 ENV CGO_ENABLED=0
 WORKDIR /tmp/gobuild
 RUN apk --update add git
+COPY --from=xcputranslate /xcputranslate /usr/local/bin/xcputranslate
 COPY --from=golangci-lint /bin /go/bin/golangci-lint
 COPY .golangci.yml .
 COPY go.mod go.sum ./
@@ -20,7 +24,10 @@ RUN golangci-lint run --timeout=10m
 ARG VERSION=unknown
 ARG BUILD_DATE="an unknown date"
 ARG COMMIT=unknown
-RUN go build -trimpath -ldflags="-s -w \
+ARG TARGETPLATFORM
+RUN GOARCH="$(xcputranslate translate -field arch -targetplatform ${TARGETPLATFORM})" \
+    GOARM="$(xcputranslate translate -field arm -targetplatform ${TARGETPLATFORM})" \
+    go build -trimpath -ldflags="-s -w \
     -X 'main.version=$VERSION' \
     -X 'main.buildDate=$BUILD_DATE' \
     -X 'main.commit=$COMMIT' \
@@ -37,7 +44,7 @@ RUN wget -qO- https://github.com/callofduty4x/CoD4x_Server/archive/${COD4X_VERSI
     sed -i 's/LINUX_LFLAGS=/LINUX_LFLAGS=-static /' makefile && \
     make
 
-FROM alpine:${ALPINE_VERSION} AS downloader
+FROM --platform=${BUILDPLATFORM} alpine:${ALPINE_VERSION} AS downloader
 WORKDIR /tmp
 ARG COD4X_VERSION=19.2
 RUN apk add --update --no-cache -q --progress unzip && \
@@ -52,7 +59,7 @@ RUN apk add --update --no-cache -q --progress unzip && \
     ./ && \
     rm -r cod4x-linux-server
 
-FROM alpine:${ALPINE_VERSION} AS files
+FROM --platform=${BUILDPLATFORM} alpine:${ALPINE_VERSION} AS files
 WORKDIR /tmp
 RUN touch steam_api.so steamclient.so
 COPY --from=downloader \
