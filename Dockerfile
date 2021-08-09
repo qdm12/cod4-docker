@@ -1,12 +1,14 @@
 ARG DEBIAN_VERSION=buster-slim
 ARG ALPINE_VERSION=3.14
 ARG GO_VERSION=1.16
+ARG GOLANGCI_LINT_VERSION=v1.41.1
+
+FROM qmcgaw/binpot:golangci-lint-${GOLANGCI_LINT_VERSION} AS golangci-lint
 
 FROM golang:${GO_VERSION}-alpine${ALPINE_VERSION} AS entrypoint
 RUN apk --update add git
 ENV CGO_ENABLED=0
-ARG GOLANGCI_LINT_VERSION=v1.41.1
-RUN wget -O- -nv https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s ${GOLANGCI_LINT_VERSION}
+COPY --from=golangci-lint /bin /go/bin/golangci-lint
 WORKDIR /tmp/gobuild
 ARG VERSION=unknown
 ARG BUILD_DATE="an unknown date"
