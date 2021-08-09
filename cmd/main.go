@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"os"
 	"strings"
@@ -155,13 +156,20 @@ func main() {
 	}
 }
 
+var (
+	errNotWritable  = errors.New("file is not writable")
+	errNotReadable  = errors.New("file is not readable")
+	errNotExcutable = errors.New("file is not executable")
+)
+
 func checkAreWritable(fileManager files.FileManager, uid, gid int, filePaths ...string) error {
 	for _, filePath := range filePaths {
 		writable, err := fileManager.IsWritable(filePath, uid, gid)
 		if err != nil {
 			return err
 		} else if !writable {
-			return fmt.Errorf("%s is not writable by user with uid %d and gid %d", filePath, uid, gid)
+			return fmt.Errorf("%w: %s, by user with uid %d and gid %d",
+				errNotWritable, filePath, uid, gid)
 		}
 	}
 	return nil
@@ -173,7 +181,8 @@ func checkAreReadable(fileManager files.FileManager, uid, gid int, filePaths ...
 		if err != nil {
 			return err
 		} else if !readable {
-			return fmt.Errorf("%s is not readable by user with uid %d and gid %d", filePath, uid, gid)
+			return fmt.Errorf("%w: %s by user with uid %d and gid %d",
+				errNotReadable, filePath, uid, gid)
 		}
 	}
 	return nil
@@ -185,7 +194,8 @@ func checkAreExecutable(fileManager files.FileManager, uid, gid int, filePaths .
 		if err != nil {
 			return err
 		} else if !executable {
-			return fmt.Errorf("%s is not executable by user with uid %d and gid %d", filePath, uid, gid)
+			return fmt.Errorf("%w: %s by user with uid %d and gid %d",
+				errNotExcutable, filePath, uid, gid)
 		}
 	}
 	return nil
