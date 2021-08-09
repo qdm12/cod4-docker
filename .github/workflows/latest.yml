@@ -1,14 +1,14 @@
-name: Release Debian build
+name: Latest build
 on:
-  release:
-    types: [published]
+  push:
+    branches: [master]
     paths:
-      - .github/workflows/release-debian.yml
+      - .github/workflows/latest.yml
       - cmd/**
       - internal/**
       - .dockerignore
       - .golangci.yml
-      - steam.Dockerfile
+      - Dockerfile
       - go.mod
       - go.sum
       - server.cfg
@@ -28,8 +28,7 @@ jobs:
             --platform=linux/amd64,linux/386 \
             --build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` \
             --build-arg COMMIT=`git rev-parse --short HEAD` \
-            --build-arg VERSION=steam-${GITHUB_REF##*/} \
-            -f steam.Dockerfile \
-            -t qmcgaw/cod4:steam-${GITHUB_REF##*/} \
+            --build-arg VERSION=latest \
+            -t qmcgaw/cod4:latest \
             --push \
             .

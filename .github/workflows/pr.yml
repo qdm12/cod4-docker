@@ -1,9 +1,9 @@
-name: PR Alpine Docker build
+name: PR Docker build
 on:
   pull_request:
     branches: [master]
     paths:
-      - .github/workflows/pr-alpine.yml
+      - .github/workflows/pr.yml
       - cmd/**
       - internal/**
       - .dockerignore

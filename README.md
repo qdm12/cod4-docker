@@ -1,6 +1,6 @@
 # COD4 Docker dedicated server
 
-Call of duty 4 dedicated server in a 24MB Docker image
+Call of duty 4 dedicated server in a Docker container.
 
 [![Docker Cod4](https://github.com/qdm12/cod4-docker/raw/master/images/title.png)](https://hub.docker.com/r/qmcgaw/cod4/)
 
@@ -29,21 +29,11 @@ Call of duty 4 dedicated server in a 24MB Docker image
 - Built-in HTTP file server for usermaps and mods (only works with .ff and .iwd files for security reasons)
 - Runs without root (safer)
 - Default cod4 configuration file [server.cfg](https://github.com/qdm12/cod4-docker/blob/master/server.cfg) when not using mods, with `exec server.cfg`
-- Multiple Docker images
-  - `qmcgaw/cod4:steam`:
-    - 368MB and based on Debian Buster Slim
-      - Works with the cod4x masterlist
-      - [Cod4x](https://github.com/callofduty4x/CoD4x_Server) server built from source statically
-      - Other Cod4x files server downloaded from [cod4x.me](https://cod4x.me)
-      - Auto updates to the latest cod4x release
-  - `qmcgaw/cod4`, `qmcgaw/cod4:alpine`:
-    - Only **24MB** and based on Alpine 3.14
-      - Does not work with the cod4x masterlist, see [this](https://github.com/qdm12/cod4-docker/issues/8)
-      - [Cod4x](https://github.com/callofduty4x/CoD4x_Server) server built from source statically
-  - For each [Github release tag](https://github.com/qdm12/cod4-docker/releases) there are two Docker images built:
-    - `:<tag-name>` is the Alpine based image
-    - `:<tag-name>-steam` is the larger Debian based image which supports steam and other features
-  - Feel free to open an issue for another Docker tag if you need one
+- Works with the cod4x masterlist
+- [Cod4x](https://github.com/callofduty4x/CoD4x_Server) server built from source
+- Other Cod4x files server downloaded from [cod4x.me](https://cod4x.me)
+- Auto updates to the latest cod4x release
+- See more Docker image tags: [Docker Hub tags](https://hub.docker.com/repository/docker/qmcgaw/cod4/tags)
 
 ## Setup
 
@@ -62,7 +52,7 @@ We assume your *call of duty 4 game* is installed at `/mycod4path`
     chmod -R 700 main mods usermaps zone
     ```
 
-    You can also run the container with `--user="root"` (unadvised!) if this doesn't work
+    You can also run the container with `--user="root"` (unadvised!) if this doesn't work, or build the image with `--build-arg UID=yourid`.
 
 1. Run the following command as root user on your host:
 

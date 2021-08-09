@@ -41,7 +41,7 @@ WORKDIR /cod4
 ARG COD4X_VERSION=20.1
 RUN wget -qO- https://github.com/callofduty4x/CoD4x_Server/archive/${COD4X_VERSION}.tar.gz | \
     tar -xz --strip-components=1 && \
-    sed -i 's/LINUX_LFLAGS=/LINUX_LFLAGS=-static /' makefile && \
+    # sed -i 's/LINUX_LFLAGS=/LINUX_LFLAGS=-static /' makefile && \
     make
 
 FROM --platform=${BUILDPLATFORM} alpine:${ALPINE_VERSION} AS downloader
@@ -57,27 +57,36 @@ RUN apk add --update --no-cache -q --progress unzip && \
     ${dirname}/cod4x-linux-server/main/xbase_00.iwd \
     ${dirname}/cod4x-linux-server/main/jcod4x_00.iwd \
     ${dirname}/cod4x-linux-server/zone/cod4x_patchv2.ff \
+    ${dirname}/cod4x-linux-server/steam_api.so \
+    ${dirname}/cod4x-linux-server/steamclient.so \
     ./ && \
     rm -r ${dirname}
 
 FROM --platform=${BUILDPLATFORM} alpine:${ALPINE_VERSION} AS files
 WORKDIR /tmp
-RUN touch steam_api.so steamclient.so
 COPY --from=downloader \
     /tmp/xbase_00.iwd \
     /tmp/jcod4x_00.iwd \
     /tmp/cod4x_patchv2.ff \
+    /tmp/steam_api.so \
+    /tmp/steamclient.so \
     ./
 COPY --from=builder /cod4/bin/cod4x18_dedrun .
 COPY server.cfg .
 COPY --from=entrypoint /tmp/gobuild/entrypoint .
+RUN touch autoupdate.lock cod4x18_dedrun.new steam_api.so.new
 RUN chown 1000 * && \
+    chmod 600 cod4x18_dedrun.new steam_api.so.new && \
     chmod 500 entrypoint cod4x18_dedrun steam_api.so steamclient.so && \
     chmod 400 xbase_00.iwd jcod4x_00.iwd cod4x_patchv2.ff server.cfg
 
-FROM alpine:${ALPINE_VERSION}
+FROM debian:${DEBIAN_VERSION}
+RUN apt-get update -qq > /dev/null && \
+    apt-get install --no-install-recommends g++-multilib ca-certificates -qq > /dev/null && \
+    apt-get autoremove -qq > /dev/null && \
+    rm -rf /var/lib/apt/lists/*
 RUN mkdir -p /home/user/.callofduty4/main && \
-    adduser -S user -h /home/user -u 1000 && \
+    adduser --system user --home /home/user --uid 1000 && \
     chown -R user /home/user && \
     chmod -R 700 /home/user
 WORKDIR /home/user/cod4

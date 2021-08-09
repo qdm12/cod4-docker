@@ -1,9 +1,9 @@
-name: Latest Alpine build
+name: Release build
 on:
-  push:
-    branches: [master]
+  release:
+    types: [published]
     paths:
-      - .github/workflows/latest-debian.yml
+      - .github/workflows/release.yml
       - cmd/**
       - internal/**
       - .dockerignore
@@ -12,6 +12,7 @@ on:
       - go.mod
       - go.sum
       - server.cfg
+
 jobs:
   buildx:
     runs-on: ubuntu-latest
@@ -28,7 +29,7 @@ jobs:
             --platform=linux/amd64,linux/386 \
             --build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` \
             --build-arg COMMIT=`git rev-parse --short HEAD` \
-            --build-arg VERSION=latest \
-            -t qmcgaw/cod4:latest \
+            --build-arg VERSION=${GITHUB_REF##*/} \
+            -t qmcgaw/cod4:${GITHUB_REF##*/} \
             --push \
             .
