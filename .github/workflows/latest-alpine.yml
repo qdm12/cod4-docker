@@ -1,4 +1,4 @@
-name: Latest Debian build
+name: Latest Alpine build
 on:
   push:
     branches: [master]
