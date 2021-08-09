@@ -15,6 +15,7 @@ import (
 	"github.com/qdm12/golibs/command"
 	"github.com/qdm12/golibs/files"
 	"github.com/qdm12/golibs/logging"
+	libparams "github.com/qdm12/golibs/params"
 	"github.com/qdm12/gosplash"
 )
 
@@ -117,7 +118,11 @@ func main() {
 	}
 	logger.Info("COD4x arguments: " + strings.Join(cod4xArguments, " "))
 
-	paramsReader := params.NewReader(logger)
+	settings := params.Settings{}
+	env := libparams.NewEnv()
+	if err := settings.Read(env); err != nil {
+		fatal(err)
+	}
 
 	wg := &sync.WaitGroup{}
 	defer wg.Done()
@@ -133,18 +138,9 @@ func main() {
 	wg.Add(1)
 	go logStreamLines(ctx, wg, logger, stdoutLines, stderrLines)
 
-	httpServer, err := paramsReader.GetHTTPServer()
-	if err != nil {
-		fatal(err)
-	}
-
-	if httpServer {
+	if settings.HTTPServer.Enabled {
 		logger.Info("HTTP static files server enabled")
-		rootURL, err := paramsReader.GetHTTPServerRootURL()
-		if err != nil {
-			fatal(err)
-		}
-		server := server.New("0.0.0.0:8000", rootURL, logger)
+		server := server.New("0.0.0.0:8000", settings.HTTPServer.RootURL, logger)
 		wg.Add(1)
 		go server.Run(ctx, wg)
 	}
