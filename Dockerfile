@@ -83,9 +83,11 @@ RUN chown ${UID}:${GID} * && \
     chmod 400 xbase_00.iwd jcod4x_00.iwd cod4x_patchv2.ff server.cfg
 
 FROM debian:${DEBIAN_VERSION}
-RUN apt-get update -qq > /dev/null && \
-    apt-get install --no-install-recommends g++-multilib ca-certificates -qq > /dev/null && \
-    apt-get autoremove -qq > /dev/null && \
+RUN dpkg --add-architecture i386 && \
+    apt-get update -qq && \
+    apt-get install -qq --no-install-recommends \
+    libc6 libgcc1:i386 	libstdc++6:i386 ca-certificates && \
+    apt-get autoremove -qq && \
     rm -rf /var/lib/apt/lists/*
 ARG UID=1000
 ARG GID=1000

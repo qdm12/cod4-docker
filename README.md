@@ -1,6 +1,6 @@
 # COD4 Docker dedicated server
 
-Call of duty 4 dedicated server in a Docker container.
+Call of duty 4 dedicated server in a 125MB Docker image.
 
 [![Docker Cod4](https://github.com/qdm12/cod4-docker/raw/master/images/title.png)](https://hub.docker.com/r/qmcgaw/cod4/)
 
@@ -33,6 +33,7 @@ Call of duty 4 dedicated server in a Docker container.
 - [Cod4x](https://github.com/callofduty4x/CoD4x_Server) server built from source
 - Other Cod4x files server downloaded from [cod4x.me](https://cod4x.me)
 - Auto updates to the latest cod4x release
+- Only 125MB
 - See more Docker image tags: [Docker Hub tags](https://hub.docker.com/repository/docker/qmcgaw/cod4/tags)
 
 ## Setup
