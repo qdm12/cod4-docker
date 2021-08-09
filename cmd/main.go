@@ -5,10 +5,10 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"os/exec"
 	"strings"
 	"sync"
 
-	"github.com/qdm12/cod4-docker/internal/constants"
 	oslib "github.com/qdm12/cod4-docker/internal/os"
 	"github.com/qdm12/cod4-docker/internal/params"
 	"github.com/qdm12/cod4-docker/internal/server"
@@ -25,10 +25,8 @@ var (
 )
 
 func main() {
-	logger, err := logging.NewLogger(logging.ConsoleEncoding, logging.InfoLevel)
-	if err != nil {
-		panic(err)
-	}
+	logger := logging.New(logging.Settings{Level: logging.LevelInfo})
+
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
@@ -47,8 +45,8 @@ func main() {
 		fmt.Println(line)
 	}
 
-	fatal := func(args ...interface{}) {
-		logger.Error(args...)
+	fatal := func(err error) {
+		logger.Error(err.Error())
 		os.Exit(1)
 	}
 
@@ -117,31 +115,28 @@ func main() {
 	for i := 1; i < len(cod4xArguments); i++ {
 		cod4xArguments[i] = os.Args[i]
 	}
-	logger.Info("COD4x arguments: %s", strings.Join(cod4xArguments, " "))
+	logger.Info("COD4x arguments: " + strings.Join(cod4xArguments, " "))
 
 	paramsReader := params.NewReader(logger)
 
-	commander := command.NewCommander()
-	streamMerger := command.NewStreamMerger()
-	go streamMerger.CollectLines(ctx, func(line string) {
-		logger.Info(line)
-	}, func(err error) {
-		logger.Error(err)
-		cancel()
-	})
-	stdout, stderr, wait, err := commander.Start(ctx, "./cod4x18_dedrun", cod4xArguments...)
+	wg := &sync.WaitGroup{}
+	defer wg.Done()
+
+	cmd := exec.CommandContext(ctx, "./cod4x18_dedrun", cod4xArguments...)
+	cmder := command.NewCmder()
+
+	stdoutLines, stderrLines, waitError, err := cmder.Start(cmd)
 	if err != nil {
 		fatal(err)
 	}
-	go streamMerger.Merge(ctx, stdout, command.MergeColor(constants.ColorStdout()))
-	go streamMerger.Merge(ctx, stderr, command.MergeColor(constants.ColorStderr()))
+
+	wg.Add(1)
+	go logStreamLines(ctx, wg, logger, stdoutLines, stderrLines)
+
 	httpServer, err := paramsReader.GetHTTPServer()
 	if err != nil {
 		fatal(err)
 	}
-
-	wg := &sync.WaitGroup{}
-	defer wg.Done()
 
 	if httpServer {
 		logger.Info("HTTP static files server enabled")
@@ -153,7 +148,9 @@ func main() {
 		wg.Add(1)
 		go server.Run(ctx, wg)
 	}
-	if err := wait(); err != nil {
+
+	err = <-waitError
+	if err != nil {
 		fatal(err)
 	}
 }
@@ -201,4 +198,21 @@ func checkAreExecutable(fileManager files.FileManager, uid, gid int, filePaths .
 		}
 	}
 	return nil
+}
+
+func logStreamLines(ctx context.Context, wg *sync.WaitGroup,
+	logger logging.Logger, stdoutLines, stderrLines chan string) {
+	defer wg.Done()
+	for {
+		select {
+		case <-ctx.Done():
+			close(stdoutLines)
+			close(stderrLines)
+			return
+		case line := <-stdoutLines:
+			logger.Info(line)
+		case line := <-stderrLines: // cod4x logs to stderr
+			logger.Info(line)
+		}
+	}
 }

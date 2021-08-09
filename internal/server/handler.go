@@ -31,7 +31,7 @@ type handler struct {
 }
 
 func (h *handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	h.logger.Info("HTTP file server: request URI %s", r.RequestURI)
+	h.logger.Info("HTTP file server: request URI " + r.RequestURI)
 	allowedExtensions := []string{"ff", "iwd"}
 	allowed := false
 	for _, allowedExtension := range allowedExtensions {
@@ -40,13 +40,13 @@ func (h *handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	if !allowed {
-		h.logger.Warn("HTTP file server: blocked request URI %s", r.RequestURI)
+		h.logger.Warn("HTTP file server: blocked request URI " + r.RequestURI)
 		w.WriteHeader(http.StatusForbidden)
 		_, err := w.Write([]byte(fmt.Sprintf(
 			"You can only access URIs ending with one of the following extensions: %s",
 			strings.Join(allowedExtensions, ", "))))
 		if err != nil {
-			h.logger.Error(err)
+			h.logger.Error(err.Error())
 		}
 		return
 	}

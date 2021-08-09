@@ -12,7 +12,7 @@ type Reader interface {
 }
 
 type reader struct {
-	envParams libparams.EnvParams
+	envParams libparams.Env
 	logger    logging.Logger
 }
 
@@ -20,15 +20,15 @@ type reader struct {
 // environment variables.
 func NewReader(logger logging.Logger) Reader {
 	return &reader{
-		envParams: libparams.NewEnvParams(),
+		envParams: libparams.NewEnv(),
 		logger:    logger,
 	}
 }
 
 func (p *reader) GetHTTPServer() (bool, error) {
-	return p.envParams.GetOnOff("HTTP_SERVER", libparams.Default("on"))
+	return p.envParams.OnOff("HTTP_SERVER", libparams.Default("on"))
 }
 
 func (p *reader) GetHTTPServerRootURL() (rootURL string, err error) {
-	return p.envParams.GetRootURL()
+	return p.envParams.RootURL("ROOT_URL")
 }
