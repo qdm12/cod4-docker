@@ -37,20 +37,20 @@ RUN dpkg --add-architecture i386 && \
     apt-get -qq update && \
     apt-get -qq install -y nasm:i386 build-essential gcc-multilib g++-multilib paxctl wget
 WORKDIR /cod4
-ARG COD4X_VERSION=20.0
+ARG COD4X_VERSION=20.1
 RUN wget -qO- https://github.com/callofduty4x/CoD4x_Server/archive/${COD4X_VERSION}.tar.gz | \
     tar -xz --strip-components=1 && \
     make
 
 FROM --platform=${BUILDPLATFORM} alpine:${ALPINE_VERSION} AS downloader
 WORKDIR /tmp
-ARG COD4X_VERSION=20.0
+ARG COD4X_VERSION=20.1
 RUN apk add --update --no-cache -q --progress unzip && \
     wget -qO cod4x_server-linux.zip https://cod4x.me/downloads/cod4x_server-linux_${COD4X_VERSION}.zip && \
     unzip -q cod4x_server-linux.zip -d . && \
     rm cod4x_server-linux.zip && \
     apk del unzip && \
-    dirname="cod4x_server-linux_${COD4X_VERSION}" && \
+    dirname="cod4x_server-linux_20.0" && \
     mv \
     ${dirname}/cod4x-linux-server/main/xbase_00.iwd \
     ${dirname}/cod4x-linux-server/main/jcod4x_00.iwd \
