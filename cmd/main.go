@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"os/signal"
 	"os/user"
 	"strings"
 
@@ -25,10 +26,13 @@ var (
 	commit    string
 )
 
-func main() {
+func main() { //nolint:gocognit
 	logger := logging.New(logging.Settings{Level: logging.LevelInfo})
 
-	ctx, cancel := context.WithCancel(context.Background())
+	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)
+	defer stop()
+
+	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
 
 	splashSettings := gosplash.Settings{
@@ -135,8 +139,9 @@ func main() {
 		fatal(err)
 	}
 
+	streamCtx, streamCancel := context.WithCancel(context.Background())
 	logStreamLinesDone := make(chan struct{})
-	go logStreamLines(ctx, logStreamLinesDone, logger, stdoutLines, stderrLines)
+	go logStreamLines(streamCtx, logStreamLinesDone, logger, stdoutLines, stderrLines)
 
 	serverDone := make(chan struct{})
 	if settings.HTTPServer.Enabled {
@@ -147,12 +152,28 @@ func main() {
 		close(serverDone)
 	}
 
-	err = <-waitError
-	if err != nil {
-		fatal(err)
+	select {
+	case <-ctx.Done():
+		stop()
+	case err := <-waitError:
+		if err != nil {
+			logger.Warn("cod4x server crashed: " + err.Error())
+		} else {
+			logger.Warn("cod4x server crashed")
+		}
+		stop()
+		cancel()
 	}
-	<-logStreamLinesDone
+
 	<-serverDone
+	logger.Info("http server terminated")
+
+	<-waitError
+	logger.Info("cod4x server terminated")
+
+	streamCancel()
+	<-logStreamLinesDone
+	logger.Info("log streaming terminated")
 }
 
 var (

@@ -34,13 +34,12 @@ func (s *Server) Run(ctx context.Context, done chan<- struct{}) {
 	server := http.Server{Addr: s.address, Handler: s.handler}
 	go func() {
 		<-ctx.Done()
-		s.logger.Warn("shutting down (context canceled)")
-		defer s.logger.Warn("shut down")
+		s.logger.Warn("shutting down HTTP server")
 		const shutdownGraceDuration = 2 * time.Second
 		shutdownCtx, cancel := context.WithTimeout(context.Background(), shutdownGraceDuration)
 		defer cancel()
 		if err := server.Shutdown(shutdownCtx); err != nil {
-			s.logger.Error("failed shutting down: " + err.Error())
+			s.logger.Error("failed shutting down HTTP server: " + err.Error())
 		}
 	}()
 	for ctx.Err() == nil {
