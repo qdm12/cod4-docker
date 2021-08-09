@@ -1,37 +1,25 @@
 package os
 
 import (
+	"errors"
 	"fmt"
 	"os/user"
 	"strconv"
 )
 
-type Manager interface {
-	GetCurrentUser() (uid, gid int, err error)
-}
+var (
+	ErrParseUID = errors.New("cannot parse user UID")
+	ErrParseGID = errors.New("cannot parse user GID")
+)
 
-type manager struct {
-	currentUser func() (*user.User, error)
-}
-
-func NewManager() Manager {
-	return &manager{
-		currentUser: user.Current,
-	}
-}
-
-func (m *manager) GetCurrentUser() (uid, gid int, err error) {
-	u, err := m.currentUser()
-	if err != nil {
-		return 0, 0, err
-	}
+func ExtractIDs(u *user.User) (uid, gid int, err error) {
 	uid, err = strconv.Atoi(u.Uid)
 	if err != nil {
-		return 0, 0, fmt.Errorf("cannot parse UID: %w", err)
+		return 0, 0, fmt.Errorf("%w: %s", ErrParseUID, err)
 	}
 	gid, err = strconv.Atoi(u.Gid)
 	if err != nil {
-		return 0, 0, fmt.Errorf("cannot parse GID: %w", err)
+		return 0, 0, fmt.Errorf("%w: %s", ErrParseGID, err)
 	}
 	return uid, gid, nil
 }

@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"os/user"
 	"strings"
 	"sync"
 
@@ -51,8 +52,11 @@ func main() {
 		os.Exit(1)
 	}
 
-	osManager := oslib.NewManager()
-	uid, gid, err := osManager.GetCurrentUser()
+	user, err := user.Current()
+	if err != nil {
+		fatal(err)
+	}
+	uid, gid, err := oslib.ExtractIDs(user)
 	if err != nil {
 		fatal(err)
 	}
