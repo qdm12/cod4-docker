@@ -11,10 +11,10 @@ import (
 	oslib "github.com/qdm12/cod4-docker/internal/os"
 	"github.com/qdm12/cod4-docker/internal/params"
 	"github.com/qdm12/cod4-docker/internal/server"
-	"github.com/qdm12/cod4-docker/internal/splash"
 	"github.com/qdm12/golibs/command"
 	"github.com/qdm12/golibs/files"
 	"github.com/qdm12/golibs/logging"
+	"github.com/qdm12/gosplash"
 )
 
 var (
@@ -31,7 +31,20 @@ func main() {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	fmt.Println(splash.Splash(version, buildDate, commit))
+	splashSettings := gosplash.Settings{
+		User:       "qdm12",
+		Repository: "cod4-docker",
+		Emails:     []string{"quentin.mcgaw@gmail.com"},
+		Version:    version,
+		Commit:     commit,
+		BuildDate:  buildDate,
+		// Sponsor information
+		PaypalUser:    "qmcgaw",
+		GithubSponsor: "qdm12",
+	}
+	for _, line := range gosplash.MakeLines(splashSettings) {
+		fmt.Println(line)
+	}
 
 	fatal := func(args ...interface{}) {
 		logger.Error(args...)
