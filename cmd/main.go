@@ -156,6 +156,7 @@ func main() { //nolint:gocognit
 	case <-ctx.Done():
 		stop()
 	case err := <-waitError:
+		close(waitError)
 		if err != nil {
 			logger.Warn("cod4x server crashed: " + err.Error())
 		} else {
