@@ -5,7 +5,7 @@ ARG GO_VERSION=1.16
 FROM golang:${GO_VERSION}-alpine${ALPINE_VERSION} AS entrypoint
 RUN apk --update add git
 ENV CGO_ENABLED=0
-ARG GOLANGCI_LINT_VERSION=v1.33.0
+ARG GOLANGCI_LINT_VERSION=v1.41.1
 RUN wget -O- -nv https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s ${GOLANGCI_LINT_VERSION}
 WORKDIR /tmp/gobuild
 ARG VERSION=unknown

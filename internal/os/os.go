@@ -25,13 +25,13 @@ func (m *manager) GetCurrentUser() (uid, gid int, err error) {
 	if err != nil {
 		return 0, 0, err
 	}
-	uid64, err := strconv.ParseInt(u.Uid, 10, 64)
+	uid, err = strconv.Atoi(u.Uid)
 	if err != nil {
 		return 0, 0, fmt.Errorf("cannot parse UID: %w", err)
 	}
-	gid64, err := strconv.ParseInt(u.Gid, 10, 64)
+	gid, err = strconv.Atoi(u.Gid)
 	if err != nil {
 		return 0, 0, fmt.Errorf("cannot parse GID: %w", err)
 	}
-	return int(uid64), int(gid64), nil
+	return uid, gid, nil
 }
