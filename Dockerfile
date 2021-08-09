@@ -6,13 +6,10 @@ ARG GOLANGCI_LINT_VERSION=v1.41.1
 FROM qmcgaw/binpot:golangci-lint-${GOLANGCI_LINT_VERSION} AS golangci-lint
 
 FROM golang:${GO_VERSION}-alpine${ALPINE_VERSION} AS entrypoint
-RUN apk --update add git
 ENV CGO_ENABLED=0
-COPY --from=golangci-lint /bin /go/bin/golangci-lint
 WORKDIR /tmp/gobuild
-ARG VERSION=unknown
-ARG BUILD_DATE="an unknown date"
-ARG COMMIT=unknown
+RUN apk --update add git
+COPY --from=golangci-lint /bin /go/bin/golangci-lint
 COPY .golangci.yml .
 COPY go.mod go.sum ./
 RUN go mod download 2>&1
@@ -20,6 +17,9 @@ COPY cmd/main.go .
 COPY internal/ ./internal/
 RUN go test ./...
 RUN golangci-lint run --timeout=10m
+ARG VERSION=unknown
+ARG BUILD_DATE="an unknown date"
+ARG COMMIT=unknown
 RUN go build -trimpath -ldflags="-s -w \
     -X 'main.version=$VERSION' \
     -X 'main.buildDate=$BUILD_DATE' \
@@ -68,6 +68,20 @@ RUN chown 1000 * && \
     chmod 400 xbase_00.iwd jcod4x_00.iwd cod4x_patchv2.ff server.cfg
 
 FROM alpine:${ALPINE_VERSION}
+RUN mkdir -p /home/user/.callofduty4/main && \
+    adduser -S user -h /home/user -u 1000 && \
+    chown -R user /home/user && \
+    chmod -R 700 /home/user
+WORKDIR /home/user/cod4
+RUN chown 1000 /home/user/cod4
+ENTRYPOINT [ "/home/user/cod4/entrypoint" ]
+CMD +set dedicated 2+set sv_cheats "1"+set sv_maxclients "64"+exec server.cfg+map_rotate
+EXPOSE 28960/udp 28960/tcp 8000/tcp
+ENV \
+    HTTP_SERVER=on \
+    ROOT_URL=/
+USER user
+COPY --from=files --chown=1000 /tmp/ ./
 ARG VERSION=unknown
 ARG BUILD_DATE="an unknown date"
 ARG COMMIT=unknown
@@ -81,17 +95,3 @@ LABEL \
     org.opencontainers.image.source="https://github.com/qdm12/cod4-docker" \
     org.opencontainers.image.title="cod4" \
     org.opencontainers.image.description="Call of duty 4X Modern Warfare dedicated server"
-RUN mkdir -p /home/user/.callofduty4/main && \
-    adduser -S user -h /home/user -u 1000 && \
-    chown -R user /home/user && \
-    chmod -R 700 /home/user
-WORKDIR /home/user/cod4
-RUN chown 1000 /home/user/cod4
-ENTRYPOINT [ "/home/user/cod4/entrypoint" ]
-CMD +set dedicated 2+set sv_cheats "1"+set sv_maxclients "64"+exec server.cfg+map_rotate
-EXPOSE 28960/udp 28960/tcp 8000/tcp
-ENV \
-    HTTP_SERVER=on \
-    ROOT_URL=/
-COPY --from=files --chown=1000 /tmp/ ./
-USER user
