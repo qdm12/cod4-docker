@@ -1,6 +1,6 @@
 # COD4 Docker dedicated server
 
-*Call of duty 4 dedicated server in a 24MB Docker image*
+Call of duty 4 dedicated server in a 24MB Docker image
 
 [![Docker Cod4](https://github.com/qdm12/cod4-docker/raw/master/images/title.png)](https://hub.docker.com/r/qmcgaw/cod4/)
 
@@ -32,19 +32,19 @@
 - Runs without root (safer)
 - Default cod4 configuration file [server.cfg](https://github.com/qdm12/cod4-docker/blob/master/server.cfg) when not using mods, with `exec server.cfg`
 - Multiple Docker images
-    - `qmcgaw/cod4:steam`:
-        - 368MB and based on Debian Buster Slim
-        - Works with the cod4x masterlist
-        - [Cod4x](https://github.com/callofduty4x/CoD4x_Server) server built from source statically
-        - Other Cod4x files server downloaded from [cod4x.me](https://cod4x.me)
-    - `qmcgaw/cod4`, `qmcgaw/cod4:alpine`:
-        - Only **24MB** and based on Alpine 3.14
-        - Does not work with the cod4x masterlist, see [this](https://github.com/qdm12/cod4-docker/issues/8)
-        - [Cod4x](https://github.com/callofduty4x/CoD4x_Server) server built from source statically
-    - For each [Github release tag](https://github.com/qdm12/cod4-docker/releases) there are two Docker images built:
-        - `:<tag-name>` is the Alpine based image
-        - `:<tag-name>-steam` is the larger Debian based image which supports steam and other features
-    - Feel free to open an issue for another Docker tag if you need one
+  - `qmcgaw/cod4:steam`:
+    - 368MB and based on Debian Buster Slim
+      - Works with the cod4x masterlist
+      - [Cod4x](https://github.com/callofduty4x/CoD4x_Server) server built from source statically
+      - Other Cod4x files server downloaded from [cod4x.me](https://cod4x.me)
+  - `qmcgaw/cod4`, `qmcgaw/cod4:alpine`:
+    - Only **24MB** and based on Alpine 3.14
+      - Does not work with the cod4x masterlist, see [this](https://github.com/qdm12/cod4-docker/issues/8)
+      - [Cod4x](https://github.com/callofduty4x/CoD4x_Server) server built from source statically
+  - For each [Github release tag](https://github.com/qdm12/cod4-docker/releases) there are two Docker images built:
+    - `:<tag-name>` is the Alpine based image
+    - `:<tag-name>-steam` is the larger Debian based image which supports steam and other features
+  - Feel free to open an issue for another Docker tag if you need one
 
 ## Setup
 
@@ -158,7 +158,7 @@ By default, the Docker image uses [this command](https://github.com/qdm12/cod4-d
 - Docker Healthcheck + HTTP healthcheck endpoint (i.e. for K8s)
 - Add extra ping with udp proxy
 - More env variables
-    - Plugins
+  - Plugins
 - [Plugins](https://hub.docker.com/r/callofduty4x/cod4x18-server/)
 - Built-in mods?
 
