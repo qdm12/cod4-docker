@@ -37,6 +37,7 @@ Call of duty 4 dedicated server in a 24MB Docker image
       - Works with the cod4x masterlist
       - [Cod4x](https://github.com/callofduty4x/CoD4x_Server) server built from source statically
       - Other Cod4x files server downloaded from [cod4x.me](https://cod4x.me)
+      - Auto updates to the latest cod4x release
   - `qmcgaw/cod4`, `qmcgaw/cod4:alpine`:
     - Only **24MB** and based on Alpine 3.14
       - Does not work with the cod4x masterlist, see [this](https://github.com/qdm12/cod4-docker/issues/8)
