@@ -8,7 +8,6 @@ import (
 	"os/exec"
 	"os/user"
 	"strings"
-	"sync"
 
 	oslib "github.com/qdm12/cod4-docker/internal/os"
 	"github.com/qdm12/cod4-docker/internal/params"
@@ -128,9 +127,6 @@ func main() {
 		fatal(err)
 	}
 
-	wg := &sync.WaitGroup{}
-	defer wg.Done()
-
 	cmd := exec.CommandContext(ctx, "./cod4x18_dedrun", cod4xArguments...)
 	cmder := command.NewCmder()
 
@@ -139,8 +135,8 @@ func main() {
 		fatal(err)
 	}
 
-	wg.Add(1)
-	go logStreamLines(ctx, wg, logger, stdoutLines, stderrLines)
+	logStreamLinesDone := make(chan struct{})
+	go logStreamLines(ctx, logStreamLinesDone, logger, stdoutLines, stderrLines)
 
 	serverDone := make(chan struct{})
 	if settings.HTTPServer.Enabled {
@@ -155,6 +151,7 @@ func main() {
 	if err != nil {
 		fatal(err)
 	}
+	<-logStreamLinesDone
 	<-serverDone
 }
 
@@ -203,9 +200,9 @@ func checkAreExecutable(fileManager files.FileManager, uid, gid int, filePaths .
 	return nil
 }
 
-func logStreamLines(ctx context.Context, wg *sync.WaitGroup,
+func logStreamLines(ctx context.Context, done chan<- struct{},
 	logger logging.Logger, stdoutLines, stderrLines chan string) {
-	defer wg.Done()
+	defer close(done)
 	for {
 		select {
 		case <-ctx.Done():
