@@ -71,8 +71,9 @@ COPY --from=downloader \
 COPY --from=builder /cod4/bin/cod4x18_dedrun .
 COPY server.cfg .
 COPY --from=entrypoint /tmp/gobuild/entrypoint .
-RUN touch autoupdate.lock
+RUN touch autoupdate.lock cod4x18_dedrun.new steam_api.so.new
 RUN chown 1000 * && \
+    chmod 600 cod4x18_dedrun.new steam_api.so.new && \
     chmod 500 entrypoint cod4x18_dedrun steam_api.so steamclient.so && \
     chmod 400 xbase_00.iwd jcod4x_00.iwd cod4x_patchv2.ff server.cfg
 
