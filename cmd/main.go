@@ -10,12 +10,11 @@ import (
 	"os/user"
 	"strings"
 
+	"github.com/qdm12/cod4-docker/internal/config/sources/env"
 	oslib "github.com/qdm12/cod4-docker/internal/os"
-	"github.com/qdm12/cod4-docker/internal/params"
 	"github.com/qdm12/cod4-docker/internal/server"
 	"github.com/qdm12/golibs/command"
 	"github.com/qdm12/golibs/files"
-	libparams "github.com/qdm12/golibs/params"
 	"github.com/qdm12/gosplash"
 	"github.com/qdm12/log"
 )
@@ -125,10 +124,15 @@ func main() {
 	}
 	logger.Info("COD4x arguments: " + strings.Join(cod4xArguments, " "))
 
-	settings := params.Settings{}
-	env := libparams.NewEnv()
-	if err := settings.Read(env); err != nil {
-		fatal(err)
+	configReader := env.New()
+	settings, err := configReader.Read()
+	if err != nil {
+		fatal(fmt.Errorf("environment variables: %w", err))
+	}
+	settings.SetDefaults()
+	err = settings.Validate()
+	if err != nil {
+		fatal(fmt.Errorf("failed validation: %w", err))
 	}
 
 	cmd := exec.CommandContext(ctx, "./cod4x18_dedrun", cod4xArguments...)
@@ -144,9 +148,9 @@ func main() {
 	go logStreamLines(streamCtx, logStreamLinesDone, logger, stdoutLines, stderrLines)
 
 	serverDone := make(chan struct{})
-	if settings.HTTPServer.Enabled {
+	if *settings.HTTPServer.Enabled {
 		logger.Info("HTTP static files server enabled")
-		server := server.New("0.0.0.0:8000", settings.HTTPServer.RootURL, logger)
+		server := server.New("0.0.0.0:8000", *settings.HTTPServer.RootURL, logger)
 		go server.Run(ctx, serverDone)
 	} else {
 		close(serverDone)
