@@ -150,7 +150,7 @@ func main() {
 	serverDone := make(chan struct{})
 	if *settings.HTTPServer.Enabled {
 		logger.Info("HTTP static files server enabled")
-		server := server.New("0.0.0.0:8000", *settings.HTTPServer.RootURL, logger)
+		server := server.New(":8000", *settings.HTTPServer.RootURL, logger)
 		go server.Run(ctx, serverDone)
 	} else {
 		close(serverDone)
