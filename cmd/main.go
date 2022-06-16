@@ -15,9 +15,9 @@ import (
 	"github.com/qdm12/cod4-docker/internal/server"
 	"github.com/qdm12/golibs/command"
 	"github.com/qdm12/golibs/files"
-	"github.com/qdm12/golibs/logging"
 	libparams "github.com/qdm12/golibs/params"
 	"github.com/qdm12/gosplash"
+	"github.com/qdm12/log"
 )
 
 var (
@@ -26,8 +26,8 @@ var (
 	commit    string
 )
 
-func main() { //nolint:gocognit
-	logger := logging.New(logging.Settings{Level: logging.LevelInfo})
+func main() {
+	logger := log.New(log.SetLevel(log.LevelInfo))
 
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)
 	defer stop()
@@ -223,7 +223,7 @@ func checkAreExecutable(fileManager files.FileManager, uid, gid int, filePaths .
 }
 
 func logStreamLines(ctx context.Context, done chan<- struct{},
-	logger logging.Logger, stdoutLines, stderrLines chan string) {
+	logger *log.Logger, stdoutLines, stderrLines chan string) {
 	defer close(done)
 	for {
 		select {
